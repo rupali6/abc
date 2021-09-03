@@ -83,3 +83,21 @@ export class MatSelectCheckComponent implements OnChanges, OnInit, OnDestroy {
     this.groupData[this.groupData.findIndex(x => x.key === this.text)].isVisible = !this.isCollapsed;
   }
 }
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+<button *ngIf="isGroup && values.length" mat-icon-button (click)="toggleGroup()">
+  <mat-icon>
+    {{ isCollapsed ? 'chevron_right' : 'expand_more' }}
+  </mat-icon>
+</button>
+
+<ng-container *ngIf="values.length" [ngSwitch]="isMultiple">
+  <mat-checkbox *ngSwitchCase="true" disableRipple matRipple class="mat-option" color="primary"
+    [ngClass]="{ 'mat-selected': isIndeterminate() || isChecked() }" [indeterminate]="isIndeterminate()"
+    [checked]="isChecked()" (click)="$event.stopPropagation()" (change)="toggleSelection($event)">
+    {{text}}
+  </mat-checkbox>
+  <span *ngSwitchDefault>
+    {{text}}
+  </span>
+</ng-container>
