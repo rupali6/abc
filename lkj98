@@ -1,0 +1,57 @@
+<mat-toolbar color="primary">
+  Angular 6 - Mat Select Hybrid
+</mat-toolbar>
+<div class="base-container">
+
+  <h2>Single Selection</h2>
+  <div class="mdl-grid">
+    <div class="mdl-cell mdl-cell--2-col">
+      <mat-select-hybrid
+        [selectControl]="exampleForm.get('singleSelect')"
+        label="Single Select"
+        [data]="options"
+        [hasNone]="true"
+        dataKey="cityID"
+        dataDisplayValue="cityName">
+      </mat-select-hybrid>
+    </div>
+    <div class="mdl-cell mdl-cell--2-col">
+      <mat-select-hybrid
+        [isRequired]="true"
+        [selectControl]="exampleForm.get('singleSelectGroup')"
+        label="Single Select - Group"
+        [data]="options"
+        dataKey="cityID"
+        dataDisplayValue="cityName"
+        groupKey="state">
+      </mat-select-hybrid>
+    </div>
+  </div>
+
+  <h2>Multiple Selection</h2>
+  <div class="mdl-grid">
+    <div class="mdl-cell mdl-cell--2-col">
+      <mat-select-hybrid
+        label="Multiple Select"
+        [selectControl]="exampleForm.get('multiSelect')"
+        [isMultiple]="true"
+        [data]="options"
+        dataKey="cityID"
+        dataDisplayValue="cityName">
+      </mat-select-hybrid>
+    </div>
+    <div class="mdl-cell mdl-cell--2-col">
+      <mat-select-hybrid
+        [selectControl]="exampleForm.get('multiSelectGroup')"
+        [isMultiple]="true"
+        label="Multiple Select - Group"
+        groupKey="state"
+        [data]="options"
+        dataKey="cityID"
+        dataDisplayValue="cityName">
+      </mat-select-hybrid>
+    </div>
+  </div>
+
+  <span class="version-info">Current build: {{version.full}}</span>
+</div>
