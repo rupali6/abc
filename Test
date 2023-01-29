@@ -1,20 +1,12 @@
-D1 = {
-'RT' :{'NG:3','DS:3'},
-'YT' :{'NG:1','DS:2'},
-}
-
-D2 = {
-'J1' :{'NG:1','DS:1'},
-'J2' :{'NG:1','DS:1'},
-}
 
 result = {}
+
 for key1, value1 in D1.items():
-  matches = []
-  for key2, value2 in D2.items():
-    if all(x.split(':')[1] >= y.split(':')[1] for x in value1 for y in value2):
-      matches.append(key2)
-  if matches:
-    result[key1] = matches
+    matches = []
+    for key2, value2 in D2.items():
+        if all(x.split(':')[1] >= y.split(':')[1] for x in value1 for y in value2 if len(x.split(':')) > 1 and len(y.split(':')) > 1):
+            matches.append(key2)
+    if matches:
+        result[key1] = matches
 
 print(result)
