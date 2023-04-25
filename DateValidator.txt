@@ -1,0 +1,28 @@
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.util.Arrays;
+import java.util.List;
+
+public class DateValidator {
+
+    private static final List<DateTimeFormatter> FORMATTERS = Arrays.asList(
+            DateTimeFormatter.ofPattern("yyyyMMdd"),
+            DateTimeFormatter.ofPattern("yyyy-MM-dd"),
+            DateTimeFormatter.ofPattern("yyyy/MM/dd")
+    );
+
+    public static boolean validateDate(String dateString) {
+        for (DateTimeFormatter formatter : FORMATTERS) {
+            try {
+                LocalDate date = LocalDate.parse(dateString, formatter);
+                LocalDate today = LocalDate.now();
+                return !date.isBefore(today);
+            } catch (DateTimeParseException e) {
+                // continue to next format
+            }
+        }
+
+        return false;
+    }
+}
