@@ -1,0 +1,85 @@
+To achieve your requirement in Java, you can follow these steps:
+
+1. Format the current date in the desired format (yyyymmdd).
+2. Create the filename using the specified pattern.
+3. Create the file with the generated filename.
+4. Write the content to the file in the specified format.
+
+Here's a Java code snippet that accomplishes this:
+
+```java
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+
+public class CreateFileExample {
+    public static void main(String[] args) {
+        ArrayList<String> al = new ArrayList<>();
+        al.add("kl");
+        al.add("lk");
+
+        String a = "test";
+        int b = 2;
+        String c = "poi";
+
+        // Format the current date as yyyymmdd
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
+        String currentDate = dateFormat.format(new Date());
+
+        // Generate the filename
+        String filename = a + "_" + b + "_ab_" + currentDate + ".y";
+
+        // Create and write to the file
+        try {
+            BufferedWriter writer = new BufferedWriter(new FileWriter(filename));
+            writer.write("<kl><9          ><poi>");
+            writer.newLine();
+            writer.write("<lk><5     ><yui>");
+            writer.newLine();
+
+            // Write the comma-separated values from the ArrayList
+            for (String value : al) {
+                writer.write(value + ",");
+            }
+
+            // Remove the trailing comma and close the file
+            writer.close();
+            System.out.println("File created: " + filename);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+This code will create a file with the specified filename pattern and content format, including the current date and comma-separated values from the ArrayList.
+
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+
+public class WriteSpacesToFileExample {
+    public static void main(String[] args) {
+        String filename = "example.txt";
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
+            // Write 10 spaces
+            int numberOfSpaces = 10;
+            for (int i = 0; i < numberOfSpaces; i++) {
+                writer.write(' ');
+            }
+
+            // Write your content after the spaces
+            writer.write("Hello, World!");
+
+            // Close the writer
+            writer.close();
+            System.out.println("File created: " + filename);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
