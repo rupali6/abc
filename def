@@ -1,0 +1,49 @@
+import org.w3c.dom.*;
+import javax.xml.parsers.*;
+import java.io.*;
+import java.util.*;
+
+public class GenericXMLParser {
+    public static void main(String[] args) {
+        try {
+            // Create a DocumentBuilder
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = factory.newDocumentBuilder();
+
+            // Parse the XML document
+            Document document = builder.parse(new File("your_xml_file.xml"));
+
+            // Start parsing from the root element
+            Element root = document.getDocumentElement();
+            parseElement(root, "");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void parseElement(Element element, String indent) {
+        System.out.println(indent + "Element: " + element.getNodeName());
+
+        // Print attributes of the element, if any
+        NamedNodeMap attributes = element.getAttributes();
+        for (int i = 0; i < attributes.getLength(); i++) {
+            Node attribute = attributes.item(i);
+            System.out.println(indent + "  Attribute: " + attribute.getNodeName() + " = " + attribute.getNodeValue());
+        }
+
+        // Print text content of the element, if any
+        String textContent = element.getTextContent().trim();
+        if (!textContent.isEmpty()) {
+            System.out.println(indent + "  Text Content: " + textContent);
+        }
+
+        // Recursively parse child elements
+        NodeList children = element.getChildNodes();
+        for (int i = 0; i < children.getLength(); i++) {
+            Node child = children.item(i);
+            if (child.getNodeType() == Node.ELEMENT_NODE) {
+                parseElement((Element) child, indent + "  ");
+            }
+        }
+    }
+}
