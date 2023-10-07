@@ -1,0 +1,35 @@
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+
+public class MergeCSVColumns {
+    public static void main(String[] args) {
+        String csvFilePath = "your_input.csv"; // Replace with your CSV file path
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(csvFilePath))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] columns = line.split(",");
+
+                // Merge columns from D to the last non-blank column
+                StringBuilder mergedData = new StringBuilder();
+                boolean isFirst = true;
+                for (int columnIndex = 3; columnIndex < columns.length; columnIndex++) {
+                    String cellValue = columns[columnIndex].trim();
+                    if (!cellValue.isEmpty()) {
+                        if (!isFirst) {
+                            mergedData.append(", "); // Add a delimiter if not the first merged value
+                        }
+                        mergedData.append(cellValue);
+                        isFirst = false;
+                    }
+                }
+
+                // Output the merged data for the current row
+                System.out.println(mergedData.toString());
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
