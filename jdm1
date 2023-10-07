@@ -1,0 +1,35 @@
+import org.jdom2.*;
+import org.jdom2.input.SAXBuilder;
+
+public class JDOMParseComplexXML {
+    public static void main(String[] args) {
+        try {
+            // Your complex XML string
+            String xmlString = "<root><element1>Value1</element1><element2>Value2</element2></root>";
+
+            // Create a StringReader to parse the XML string
+            java.io.StringReader stringReader = new java.io.StringReader(xmlString);
+
+            // Create a SAXBuilder for parsing
+            SAXBuilder saxBuilder = new SAXBuilder();
+            Document document = saxBuilder.build(stringReader);
+
+            // Get the root element
+            Element rootElement = document.getRootElement();
+
+            // Access elements and data
+            Element element1 = rootElement.getChild("element1");
+            String element1Value = element1.getTextTrim();
+
+            Element element2 = rootElement.getChild("element2");
+            String element2Value = element2.getTextTrim();
+
+            // Print the values
+            System.out.println("Element1: " + element1Value);
+            System.out.println("Element2: " + element2Value);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
