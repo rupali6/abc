@@ -1,0 +1,28 @@
+import org.dom4j.*;
+import org.dom4j.io.*;
+
+public class Dom4jParseExample {
+
+    public static void main(String[] args) {
+        try {
+            // Create a SAXReader to read the XML file
+            SAXReader reader = new SAXReader();
+            Document document = reader.read("your_xml_file.xml");
+
+            // Get the root element of the XML document
+            Element rootElement = document.getRootElement();
+
+            // Access elements and data
+            for (Iterator<Element> iterator = rootElement.elementIterator(); iterator.hasNext(); ) {
+                Element element = iterator.next();
+                String elementName = element.getName();
+                String elementValue = element.getTextTrim();
+                System.out.println("Element Name: " + elementName);
+                System.out.println("Element Value: " + elementValue);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
