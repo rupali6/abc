@@ -1,0 +1,28 @@
+import com.sun.tools.xjc.api.XJC;
+import com.sun.tools.xjc.api.impl.s2j.SchemaCompilerImpl;
+
+public class XSDToJavaGenerator {
+    public static void main(String[] args) {
+        try {
+            // Initialize the XJC (XML to Java Compiler) instance
+            SchemaCompilerImpl schemaCompiler = new SchemaCompilerImpl();
+            
+            // Set the schema file(s) to be compiled
+            String[] schemaFiles = { "your_schema.xsd" }; // Replace with your XSD file(s)
+            schemaCompiler.parseSchemaFiles(schemaFiles);
+
+            // Set the output directory for generated Java classes
+            String outputDir = "src/main/java"; // Replace with your desired output directory
+            schemaCompiler.setDefaultPackageName("com.example.generated"); // Set the package name for generated classes
+            schemaCompiler.setOutputDir(outputDir);
+
+            // Compile the schema and generate Java classes
+            XJC xjc = schemaCompiler.bind();
+            xjc.run();
+
+            System.out.println("Java classes generated successfully.");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
