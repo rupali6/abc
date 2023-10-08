@@ -1,0 +1,41 @@
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.DocumentBuilder;
+import org.w3c.dom.Document;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpression;
+import javax.xml.xpath.XPathFactory;
+import org.w3c.dom.NodeList;
+
+public class XPathPriceParser {
+    public static void main(String[] args) {
+        try {
+            // Create a DocumentBuilder
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = factory.newDocumentBuilder();
+
+            // Parse the XML file into a Document
+            Document document = builder.parse("example.xml");
+
+            // Create an XPathFactory
+            XPathFactory xPathFactory = XPathFactory.newInstance();
+
+            // Create an XPath object
+            XPath xpath = xPathFactory.newXPath();
+
+            // Compile the XPath expression
+            XPathExpression expression = xpath.compile("/bookstore/book/price");
+
+            // Evaluate the XPath expression against the Document
+            NodeList priceNodes = (NodeList) expression.evaluate(document, XPathConstants.NODESET);
+
+            // Iterate through the <price> nodes and print each price
+            for (int i = 0; i < priceNodes.getLength(); i++) {
+                String priceString = priceNodes.item(i).getTextContent();
+                System.out.println("Price " + (i + 1) + ": " + priceString);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
