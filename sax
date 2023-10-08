@@ -1,0 +1,42 @@
+import javax.xml.parsers.*;
+import javax.xml.xpath.*;
+import org.w3c.dom.*;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import java.io.StringReader;
+
+public class XPathExample {
+    public static void main(String[] args) {
+        try {
+            // XML data as a string
+            String xmlData = "<library><book><title>Book 1</title></book><book><title>Book 2</title></book></library>";
+
+            // Parse the XML data into a Document
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = factory.newDocumentBuilder();
+            InputSource inputSource = new InputSource(new StringReader(xmlData));
+            Document document = builder.parse(inputSource);
+
+            // Create an XPath expression
+            XPathFactory xpathFactory = XPathFactory.newInstance();
+            XPath xpath = xpathFactory.newXPath();
+            String expression = "/library/book/title"; // XPath expression to get all book titles
+            XPathExpression xpathExpr = xpath.compile(expression);
+
+            // Evaluate the XPath expression on the document
+            Object result = xpathExpr.evaluate(document, XPathConstants.NODESET);
+
+            // Handle the result (in this case, it's a NodeList)
+            if (result instanceof NodeList) {
+                NodeList nodeList = (NodeList) result;
+                System.out.println("List of Book Titles:");
+                for (int i = 0; i < nodeList.getLength(); i++) {
+                    Node node = nodeList.item(i);
+                    System.out.println("Title: " + node.getTextContent());
+                }
+            }
+        } catch (ParserConfigurationException | SAXException | IOException | XPathExpressionException e) {
+            e.printStackTrace();
+        }
+    }
+}
