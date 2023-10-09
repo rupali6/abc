@@ -1,0 +1,28 @@
+public class ExtractStringBetween {
+    public static void main(String[] args) {
+        String input = "||hbhabha||sbshs||snsnsd||ABCDEFT||";
+
+        // Find the index of the 4th occurrence of "||"
+        int fourthDelimiterIndex = nthIndexOf(input, "||", 4);
+
+        if (fourthDelimiterIndex != -1) {
+            // Find the index of the 5th occurrence of "||"
+            int fifthDelimiterIndex = input.indexOf("||", fourthDelimiterIndex + 2);
+
+            if (fifthDelimiterIndex != -1) {
+                // Extract the substring between the 4th and 5th occurrences of "||"
+                String extractedData = input.substring(fourthDelimiterIndex + 2, fifthDelimiterIndex);
+                System.out.println("Extracted Data: " + extractedData);
+            }
+        }
+    }
+
+    // Helper method to find the nth occurrence of a substring in a string
+    private static int nthIndexOf(String input, String target, int n) {
+        int index = input.indexOf(target);
+        while (--n > 0 && index >= 0) {
+            index = input.indexOf(target, index + 1);
+        }
+        return index;
+    }
+}
