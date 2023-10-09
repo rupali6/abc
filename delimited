@@ -1,0 +1,38 @@
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVRecord;
+
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+public class ReadCSVIntoArrayList {
+    public static void main(String[] args) {
+        String csvFilePath = "your_file.csv"; // Replace with your CSV file path
+
+        try (FileReader fileReader = new FileReader(csvFilePath);
+             CSVParser csvParser = new CSVParser(fileReader, CSVFormat.DEFAULT)) {
+
+            List<ArrayList<String>> csvData = new ArrayList<>();
+
+            for (CSVRecord csvRecord : csvParser) {
+                ArrayList<String> rowData = new ArrayList<>();
+                for (String value : csvRecord) {
+                    rowData.add(value);
+                }
+                csvData.add(rowData);
+            }
+
+            // Now 'csvData' contains the CSV data as a list of ArrayLists
+            for (ArrayList<String> row : csvData) {
+                for (String value : row) {
+                    System.out.print(value + "\t");
+                }
+                System.out.println();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
