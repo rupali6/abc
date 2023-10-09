@@ -1,0 +1,8 @@
+// Helper method to find the nth occurrence of a substring in a string
+    private static int nthIndexOf(String input, String target, int n) {
+        int index = input.indexOf(target);
+        while (--n > 0 && index >= 0) {
+            index = input.indexOf(target, index + 1);
+        }
+        return index;
+    }
