@@ -1,0 +1,31 @@
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+
+public class CsvColumnCopy {
+    public static void main(String[] args) {
+        String inputCsvFileName = "input.csv";
+        String outputCsvFileName = "output.csv";
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(inputCsvFileName));
+             BufferedWriter writer = new BufferedWriter(new FileWriter(outputCsvFileName))) {
+
+            String line;
+            while ((line = reader.readLine()) != null) {
+                // Split the CSV line into columns using a comma delimiter
+                String[] columns = line.split(",");
+
+                // Check if there is at least one column
+                if (columns.length > 0) {
+                    // Write the first column to the output CSV
+                    writer.write(columns[0]);
+                    writer.newLine(); // Add a newline to separate rows
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
