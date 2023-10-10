@@ -1,0 +1,27 @@
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+
+public class ReadCSV {
+    public static void main(String[] args) {
+        // Specify the path to your CSV file
+        String filePath = "your_file.csv";
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            boolean skipFirstLine = true; // Flag to skip the first line
+            
+            while ((line = reader.readLine()) != null) {
+                if (skipFirstLine) {
+                    skipFirstLine = false;
+                    continue; // Skip the first line
+                }
+                
+                // Process the current line here
+                System.out.println(line);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
