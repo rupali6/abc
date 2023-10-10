@@ -1,0 +1,38 @@
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.StringTokenizer;
+
+public class ReadThirdToken {
+    public static void main(String[] args) {
+        // Specify the path to your CSV file
+        String filePath = "your_file.csv";
+        String delimiter = "||"; // Replace with your delimiter
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            
+            while ((line = reader.readLine()) != null) {
+                // Tokenize the current line using StringTokenizer
+                StringTokenizer tokenizer = new StringTokenizer(line, delimiter);
+                
+                // Skip the first two tokens (fields)
+                for (int i = 1; i <= 2 && tokenizer.hasMoreTokens(); i++) {
+                    tokenizer.nextToken();
+                }
+                
+                // Check if there is a third token and process it
+                if (tokenizer.hasMoreTokens()) {
+                    String thirdToken = tokenizer.nextToken();
+                    // Do something with the third token
+                    System.out.println("Third Token: " + thirdToken);
+                } else {
+                    // Handle the case where there is no third token
+                    System.out.println("No third token found");
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
