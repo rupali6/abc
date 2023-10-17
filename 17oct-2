@@ -1,0 +1,24 @@
+String line;
+            int skipLines = 4;
+            while ((line = bufferedReader.readLine()) != null) {
+                if (skipLines > 0) {
+                    skipLines--;
+                    continue;
+                }
+
+                if (line.contains("<?xml>")) {
+                    insideXmlBlock = true;
+                }
+
+                if (insideXmlBlock) {
+                    currentXmlData.append(line).append(System.lineSeparator());
+
+                    if (line.contains("</RUPALI>")) {
+                        xmlDataList.add(currentXmlData.toString());
+                        currentXmlData.setLength(0);
+                        insideXmlBlock = false;
+                    }
+                }
+            }
+
+            bufferedReader.close();
