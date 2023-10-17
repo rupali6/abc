@@ -1,0 +1,45 @@
+import java.io.*;
+import java.util.ArrayList;
+
+public class XmlDataExtractor {
+    public static void main(String[] args) {
+        try {
+            FileReader fileReader = new FileReader("your_file.txt"); // Replace "your_file.txt" with your file path
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
+
+            ArrayList<String> xmlDataList = new ArrayList<>();
+            StringBuilder currentXmlData = new StringBuilder();
+            boolean insideXmlBlock = false;
+
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                // Check if the line contains <?xml>
+                if (line.contains("<?xml>")) {
+                    insideXmlBlock = true;
+                    currentXmlData.append(line).append(System.lineSeparator());
+                }
+
+                // If inside an XML block, append the line to the current data
+                if (insideXmlBlock) {
+                    currentXmlData.append(line).append(System.lineSeparator());
+
+                    // Check if the line contains </rupali>
+                    if (line.contains("</rupali>")) {
+                        xmlDataList.add(currentXmlData.toString());
+                        currentXmlData.setLength(0); // Reset the StringBuilder
+                        insideXmlBlock = false;
+                    }
+                }
+            }
+
+            bufferedReader.close();
+
+            // Print or process the extracted XML data
+            for (String xmlData : xmlDataList) {
+                System.out.println(xmlData);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
