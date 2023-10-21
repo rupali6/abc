@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Customer Data</title>
+</head>
+<body>
+    <h1>Customer Data</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <!-- Add more table headers for other fields -->
+            </tr>
+        </thead>
+        <tbody>
+            {% for customer in customers %}
+            <tr>
+                <td>{{ customer.id }}</td>
+                <td>{{ customer.name }}</td>
+                <!-- Add more table data for other fields -->
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Add a form to add new customers -->
+    <form id="customer-form">
+        <!-- Input fields for the customer data -->
+        <input type="text" name="id" placeholder="ID">
+        <input type="text" name="name" placeholder="Name">
+        <!-- Add more input fields for other fields -->
+        <button type="submit">Add Customer</button>
+    </form>
+
+    <div id="message"></div>
+
+    <script>
+        // JavaScript to handle form submission
+        document.getElementById('customer-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            fetch('/add_customer', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('message').innerText = data.message;
+                // Reload the page to update the table
+                location.reload();
+            });
+        });
+    </script>
+</body>
+</html>
