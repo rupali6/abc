@@ -1,0 +1,39 @@
+from flask import Flask, render_template, jsonify
+
+app = Flask(__name__)
+
+# Create an empty list to store user data
+user_data = []
+
+# Function to generate 20 rows of sample data
+def generate_sample_data():
+    for i in range(20):
+        user_data.append({
+            'ID': f'ID_{i}',
+            'Name': f'Name_{i}',
+            'isAnnualIncomePaidIn': i % 2 == 0,
+            'savings': i * 1000,
+            'investments': i * 2000,
+            'annualIncome': i * 5000,
+            'hasMortgage': i % 2 == 0,
+            'hasInvestment': i % 3 == 0,
+            'hasLifeInsurance': i % 4 == 0,
+            'hasProtectionProduct': i % 5 == 0,
+            'eligible': f'Eligible_{i}',
+            'eligibleStatus': f'Status_{i}',
+            'statusDate': '2023-10-22'
+        })
+
+generate_sample_data()
+
+# Route to fetch data
+@app.route('/get_data', methods=['GET'])
+def get_data():
+    return jsonify(user_data)
+
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+if __name__ == '__main__':
+    app.run(debug=True)
