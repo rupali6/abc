@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>User Data</title>
+</head>
+<body>
+    <h1>User Data</h1>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>isAnnualIncomePaidIn</th>
+            <th>Savings</th>
+            <th>Investments</th>
+            <th>Annual Income</th>
+            <th>Has Mortgage</th>
+            <th>Has Investment</th>
+            <th>Has Life Insurance</th>
+            <th>Has Protection Product</th>
+            <th>Eligible</th>
+            <th>Eligible Status</th>
+            <th>Status Date</th>
+        </tr>
+    </table>
+    <script>
+        // Fetch data from the server and populate the table
+        fetch('/get_data')
+            .then(response => response.json())
+            .then(data => {
+                const table = document.querySelector('table');
+                data.forEach(row => {
+                    const tr = document.createElement('tr');
+                    Object.values(row).forEach(value => {
+                        const td = document.createElement('td');
+                        td.textContent = value;
+                        tr.appendChild(td);
+                    });
+                    table.appendChild(tr);
+                });
+            });
+    </script>
+</body>
+</html>
