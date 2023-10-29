@@ -1,0 +1,7 @@
+cursor.execute("""
+    UPDATE your_table
+    SET e = CASE
+        WHEN (a > 5 OR (b > 7 AND (c = 1 OR d = 1))) THEN 'hello'
+        ELSE e
+    END;
+""")
