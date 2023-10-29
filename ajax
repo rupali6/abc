@@ -1,0 +1,21 @@
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const updateDataLink = document.getElementById("update-data");
+
+    updateDataLink.addEventListener("click", function(event) {
+      event.preventDefault();
+
+      fetch("/update-customer-data", {
+        method: "POST",
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          // Reload the page after data is updated
+          location.reload();
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+    });
+  });
+</script>
