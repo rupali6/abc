@@ -1,0 +1,24 @@
+import PyPDF2
+
+# Open the PDF file in read-binary mode
+with open("your_pdf_file.pdf", "rb") as pdf_file:
+    # Create a PDF object
+    pdf_reader = PyPDF2.PdfFileReader(pdf_file)
+
+    # Check if the PDF is encrypted
+    if pdf_reader.isEncrypted:
+        # If the PDF is encrypted, you may need to decrypt it with a password.
+        # You can use pdf_reader.decrypt("your_password") to decrypt the PDF.
+
+        # If the PDF is not encrypted, proceed to extract text.
+        pass
+
+    # Initialize an empty list to store extracted text lines
+    text = []
+
+    # Loop through each page in the PDF and extract text
+    for page_num in range(pdf_reader.numPages):
+        page = pdf_reader.getPage(page_num)
+        text.extend(page.extractText().splitlines())
+
+# Now 'text' contains the extracted text as a list of lines
