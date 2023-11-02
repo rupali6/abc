@@ -1,0 +1,9 @@
+from pdfminer.high_level import extract_text
+
+pdf_file = "your_pdf_file.pdf"
+text = []
+
+# Extract text and append each line to the 'text' list
+text.extend(extract_text(pdf_file).splitlines())
+
+# Now 'text' contains the extracted text as a list of lines
