@@ -1,0 +1,24 @@
+# Open the file for reading
+with open('your_file.txt', 'r') as file:
+    lines = file.readlines()
+
+# Process each line
+formatted_lines = []
+for line in lines:
+    start_index = line.find('<')  # Find the index of '<'
+    end_index = line.find('>')  # Find the index of '>'
+    
+    # Adjust if '<' and '>' are found in the line
+    if start_index != -1 and end_index != -1:
+        content = line[start_index + 1: end_index]  # Extract content between '<' and '>'
+        spaces_to_add = 9 - (end_index - start_index)  # Calculate spaces needed
+        
+        if spaces_to_add > 0:
+            content = content + ' ' * spaces_to_add  # Append spaces to adjust position
+            line = line[:start_index + 1] + content + '>' + '\n'  # Reconstruct the line
+        
+    formatted_lines.append(line)
+
+# Write the updated lines back to the file
+with open('formatted_file.txt', 'w') as file:
+    file.writelines(formatted_lines)
