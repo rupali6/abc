@@ -1,0 +1,19 @@
+def format_data(file_path):
+    formatted_lines = []
+    with open(file_path, 'r') as file:
+        for line in file:
+            line = line.strip()  # Remove any leading/trailing whitespaces
+            index_of_gt = line.find('>')  # Find the index of '>'
+            if index_of_gt != -1:
+                spaces_to_add = 16 - index_of_gt  # Calculate spaces to add before '>'
+                line = line.replace('>', ' ' * spaces_to_add + '>')  # Add spaces before '>'
+            formatted_lines.append(line)
+    return formatted_lines
+
+# Replace 'file_path' with the path to your file
+file_path = 'your_file.txt'  # Replace 'your_file.txt' with your file's path
+formatted_data = format_data(file_path)
+
+# Print the formatted data
+for line in formatted_data:
+    print(line)
