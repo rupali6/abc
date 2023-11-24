@@ -1,0 +1,27 @@
+def format_data(input_file, output_file):
+    formatted_lines = []
+    with open(input_file, 'r') as file:
+        for line in file:
+            line = line.strip()  # Remove any leading/trailing whitespaces
+            index_of_gt = line.find('>')  # Find the index of '>'
+            if index_of_gt != -1:
+                spaces_to_add = 16 - index_of_gt  # Calculate spaces to add before '>'
+                line = line.replace('>', ' ' * spaces_to_add + '>')  # Add spaces before '>'
+
+                # Check for 'M' before '>'
+                index_of_m = line.find('M')
+                if index_of_m != -1 and index_of_m < 15:
+                    spaces_to_add_m = 15 - index_of_m
+                    line = line.replace('M', ' ' * spaces_to_add_m + 'M', 1)
+
+            formatted_lines.append(line)
+
+    # Write formatted data to a new file
+    with open(output_file, 'w') as output:
+        for line in formatted_lines:
+            output.write(line + '\n')
+
+# Replace 'input_file.txt' and 'output_file.txt' with your file paths
+input_file_path = 'input_file.txt'  # Replace 'input_file.txt' with your file's path
+output_file_path = 'output_file.txt'  # Replace 'output_file.txt' with the desired output file's path
+format_data(input_file_path, output_file_path)
