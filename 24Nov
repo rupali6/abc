@@ -1,0 +1,20 @@
+with open('your_file.txt', 'r') as file:
+    lines = file.readlines()
+
+updated_lines = []
+for line in lines:
+    if '<>' in line:
+        index = line.find('<>')
+        if 'X>' in line[:index]:  # Case 1: 'X>' is before '<>'
+            if line[index - 1] == 'X':
+                updated_line = line.replace('<>', ' ' * (9 - index) + '<>')
+            else:  # Case 2: 'X>' is not before '<>'
+                updated_line = line.replace('<>', ' ' * (10 - index) + '<>')
+        else:  # Case 3: '<>' not preceded by 'X>'
+            updated_line = line.replace('<>', ' ' * (10 - index) + '<>')
+        updated_lines.append(updated_line)
+    else:
+        updated_lines.append(line)
+
+with open('updated_file.txt', 'w') as file:
+    file.writelines(updated_lines)
