@@ -1,0 +1,20 @@
+#!/bin/bash
+
+# Connect to Oracle and execute query
+query_result=$(sqlplus -s username/password@hostname <<EOF
+SET PAGESIZE 0;
+SET FEEDBACK OFF;
+SET VERIFY OFF;
+SELECT column_name FROM table_name;
+EXIT;
+EOF
+)
+
+# Store the result in an array
+IFS=$'\n' read -d '' -r -a array <<< "$query_result"
+
+# Loop through the array
+for element in "${array[@]}"
+do
+    echo "$element"
+done
