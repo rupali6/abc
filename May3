@@ -1,0 +1,28 @@
+#!/bin/bash
+
+# Assigning variables
+B="$1" # Value passed for variable B
+StartDate="$2" # Start date string in YYYYMMDDHHMMSS format
+EndDate="$3"   # End date string in YYYYMMDDHHMMSS format
+Path="a/b/c"   # Path to search
+StringToCheck="$4" # String to check in the last line of the file
+
+# Convert StartDate and EndDate to YYYY-MM-DD HH:MM:SS format
+StartDateFormatted=$(date -d "${StartDate:0:4}-${StartDate:4:2}-${StartDate:6:2} ${StartDate:8:2}:${StartDate:10:2}:${StartDate:12:2}" "+%F %T")
+EndDateFormatted=$(date -d "${EndDate:0:4}-${EndDate:4:2}-${EndDate:6:2} ${EndDate:8:2}:${EndDate:10:2}:${EndDate:12:2}" "+%F %T")
+
+# Find the file matching the criteria
+file=$(find "$Path" -type f -name "*${B}*" -newermt "$StartDateFormatted" ! -newermt "$EndDateFormatted")
+
+# Check if file exists and is not empty
+if [ -s "$file" ]; then
+    # Read the last line of the file and check if it contains the string
+    last_line=$(tail -n 1 "$file")
+    if [[ "$last_line" == *"$StringToCheck"* ]]; then
+        echo "String found in the last line of the file: $file"
+    else
+        echo "String not found in the last line of the file: $file"
+    fi
+else
+    echo "No file found matching the criteria."
+fi
