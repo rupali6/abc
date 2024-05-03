@@ -1,0 +1,10 @@
+#!/bin/bash
+
+# Assigning variables
+B="$1" # Value passed for variable B
+StartDate="$2" # Start date string
+EndDate="$3"   # End date string
+Path="a/b/c"   # Path to search
+
+# Finding the file matching the criteria
+find "$Path" -type f -name "*${B}*" -newermt "$StartDate" ! -newermt "$EndDate"
