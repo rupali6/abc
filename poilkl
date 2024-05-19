@@ -1,0 +1,43 @@
+import java.io.IOException;
+import java.nio.file.*;
+import java.util.stream.Stream;
+
+public class RenameFilesInDirectory {
+
+    public static void main(String[] args) {
+        // Specify the directory path
+        String directoryPath = "/path/to/your/directory";
+        
+        // Call the method to rename files
+        try {
+            appendPrefixToFiles(directoryPath, "rupali_");
+        } catch (IOException e) {
+            System.err.println("Error renaming files: " + e.getMessage());
+        }
+    }
+
+    public static void appendPrefixToFiles(String directoryPath, String prefix) throws IOException {
+        Path dirPath = Paths.get(directoryPath);
+        
+        // Check if the directory exists
+        if (!Files.exists(dirPath) || !Files.isDirectory(dirPath)) {
+            throw new IOException("The specified path is not a directory or does not exist.");
+        }
+
+        // Get the list of files in the directory using parallel Stream API
+        try (Stream<Path> files = Files.list(dirPath).parallel()) {
+            files.filter(Files::isRegularFile)
+                 .forEach(filePath -> {
+                     String fileName = filePath.getFileName().toString();
+                     String newFileName = prefix + fileName;
+                     Path newFilePath = dirPath.resolve(newFileName);
+                     try {
+                         Files.move(filePath, newFilePath, StandardCopyOption.REPLACE_EXISTING);
+                         System.out.println("Renamed: " + fileName + " to " + newFileName);
+                     } catch (IOException e) {
+                         System.err.println("Error renaming file: " + filePath + " - " + e.getMessage());
+                     }
+                 });
+        }
+    }
+}
