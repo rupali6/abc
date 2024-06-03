@@ -1,0 +1,70 @@
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
+
+public class SplitFile {
+    public static void main(String[] args) {
+        String inputFile = "input.txt";
+        String delimiter = "&&";
+        int counter = 2;
+        int numFiles = 5;
+        String outputPrefix = "output";
+
+        try {
+            // Read the input file
+            String content = readFile(inputFile);
+
+            // Split the content by the delimiter
+            List<String> parts = splitContent(content, delimiter, counter);
+
+            // Write the parts to output files
+            writeFiles(parts, outputPrefix);
+
+            System.out.println("Data successfully split into " + parts.size() + " files.");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static String readFile(String filePath) throws IOException {
+        StringBuilder content = new StringBuilder();
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                content.append(line);
+            }
+        }
+        return content.toString();
+    }
+
+    private static List<String> splitContent(String content, String delimiter, int counter) {
+        List<String> parts = new ArrayList<>();
+        int index = 0;
+        int delimiterCount = 0;
+
+        for (int i = 0; i < content.length(); i++) {
+            if (content.startsWith(delimiter, i)) {
+                delimiterCount++;
+                if (delimiterCount % counter == 0) {
+                    parts.add(content.substring(index, i + delimiter.length()).trim());
+                    index = i + delimiter.length();
+                }
+            }
+        }
+
+        if (index < content.length()) {
+            parts.add(content.substring(index).trim());
+        }
+
+        return parts;
+    }
+
+    private static void writeFiles(List<String> parts, String outputPrefix) throws IOException {
+        for (int i = 0; i < parts.size(); i++) {
+            String outputFile = outputPrefix + "_" + (i + 1) + ".txt";
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile))) {
+                writer.write(parts.get(i));
+            }
+        }
+    }
+}
