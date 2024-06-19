@@ -1,0 +1,18 @@
+package com.example;
+
+import javax.xml.bind.annotation.XmlElement;
+import java.util.ArrayList;
+import java.util.List;
+
+public class Val3 {
+    private List<DataCVAL3> dataCVAL3 = new ArrayList<>();
+
+    @XmlElement(name = "CHILDOFVAL3")
+    public List<DataCVAL3> getDataCVAL3() {
+        return dataCVAL3;
+    }
+
+    public void setDataCVAL3(List<DataCVAL3> dataCVAL3) {
+        this.dataCVAL3 = dataCVAL3;
+    }
+}
