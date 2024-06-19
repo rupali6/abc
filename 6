@@ -1,0 +1,387 @@
+package com.example;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
+public class CustomXMLWriter {
+
+    public static void main(String[] args) {
+        int n = 5; // Number of DYNAMICTAG elements
+        int count = 4; // Number of dataCVAL3 elements
+        int c2Count = 10; // Number of C2 elements
+
+        God god = new God();
+        god.setHead(createHead());
+        god.setDynamicTags(createDynamicTags(n, count));
+        god.setDemigod(createDemigod(c2Count));
+        god.setLastTag(createLastTag());
+
+        try {
+            // Create JAXB context and instantiate marshaller
+            JAXBContext context = JAXBContext.newInstance(God.class);
+            Marshaller marshaller = context.createMarshaller();
+            marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+
+            // Write to System.out
+            marshaller.marshal(god, System.out);
+
+            // Write to File
+            marshaller.marshal(god, new File("custom.xml"));
+
+            System.out.println("XML file created successfully!");
+
+        } catch (JAXBException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static Head createHead() {
+        Head head = new Head();
+        head.setHdr1("data");
+        head.setHdr2("data");
+        head.setHdr3("data");
+        return head;
+    }
+
+    private static List<DynamicTag> createDynamicTags(int n, int count) {
+        List<DynamicTag> dynamicTags = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            DynamicTag dynamicTag = new DynamicTag();
+            dynamicTag.setVal3(createVal3(count));
+            dynamicTag.setVal5(createVal5());
+            dynamicTags.add(dynamicTag);
+        }
+        return dynamicTags;
+    }
+
+    private static Val3 createVal3(int count) {
+        Val3 val3 = new Val3();
+        DataCVAL3 dataCVAL3 = new DataCVAL3();
+        dataCVAL3.setHeaderCVAL3("count");
+        for (int i = 0; i < count; i++) {
+            dataCVAL3.getDataCVAL3List().add("somedata");
+        }
+        val3.getDataCVAL3().add(dataCVAL3);
+        return val3;
+    }
+
+    private static Val5 createVal5() {
+        Val5 val5 = new Val5();
+        return val5;
+    }
+
+    private static Demigod createDemigod(int c2Count) {
+        Demigod demigod = new Demigod();
+        C c = new C();
+        for (int i = 0; i < c2Count; i++) {
+            c.getC2().add("0998");
+        }
+        demigod.setC(c);
+        return demigod;
+    }
+
+    private static LastTag createLastTag() {
+        LastTag lastTag = new LastTag();
+        W w = new W();
+        lastTag.setW(w);
+        return lastTag;
+    }
+}
+-------------------------------------------
+package com.example;
+
+import javax.xml.bind.annotation.XmlElement;
+
+public class W {
+    private String w1 = "0998";
+    private String w2 = "0998";
+
+    @XmlElement(name = "W1")
+    public String getW1() {
+        return w1;
+    }
+
+    public void setW1(String w1) {
+        this.w1 = w1;
+    }
+
+    @XmlElement(name = "W2")
+    public String getW2() {
+        return w2;
+    }
+
+    public void setW2(String w2) {
+        this.w2 = w2;
+    }
+}
+
+---------------------------------------------------
+package com.example;
+
+import javax.xml.bind.annotation.XmlElement;
+
+public class LastTag {
+    private String d1 = "0998";
+    private W w;
+
+    @XmlElement(name = "D1")
+    public String getD1() {
+        return d1;
+    }
+
+    public void setD1(String d1) {
+        this.d1 = d1;
+    }
+
+    @XmlElement(name = "W")
+    public W getW() {
+        return w;
+    }
+
+    public void setW(W w) {
+        this.w = w;
+    }
+}
+---------------------------------------
+package com.example;
+
+import javax.xml.bind.annotation.XmlElement;
+import java.util.ArrayList;
+import java.util.List;
+
+public class C {
+    private String c1 = "0998";
+    private List<String> c2 = new ArrayList<>();
+
+    @XmlElement(name = "C1")
+    public String getC1() {
+        return c1;
+    }
+
+    public void setC1(String c1) {
+        this.c1 = c1;
+    }
+
+    @XmlElement(name = "C2")
+    public List<String> getC2() {
+        return c2;
+    }
+
+    public void setC2(List<String> c2) {
+        this.c2 = c2;
+    }
+}
+
+=--------------------------------------
+package com.example;
+
+import javax.xml.bind.annotation.XmlElement;
+
+public class Demigod {
+    private String a = "0998";
+    private String b = "0998";
+    private C c;
+
+    @XmlElement(name = "A")
+    public String getA() {
+        return a;
+    }
+
+    public void setA(String a) {
+        this.a = a;
+    }
+
+    @XmlElement(name = "B")
+    public String getB() {
+        return b;
+    }
+
+    public void setB(String b) {
+        this.b = b;
+    }
+
+    @XmlElement(name = "C")
+    public C getC() {
+        return c;
+    }
+
+    public void setC(C c) {
+        this.c = c;
+    }
+}
+-----------------------------------------------
+package com.example;
+
+import javax.xml.bind.annotation.XmlElement;
+
+public class Val5 {
+    private String childOfVal5Tag1 = "0998";
+    private String childOfVal5Tag2 = "0998";
+
+    @XmlElement(name = "CHILDOFVAL5_TAG1")
+    public String getChildOfVal5Tag1() {
+        return childOfVal5Tag1;
+    }
+
+    public void setChildOfVal5Tag1(String childOfVal5Tag1) {
+        this.childOfVal5Tag1 = childOfVal5Tag1;
+    }
+
+    @XmlElement(name = "CHILDOFVAL5_TAG2")
+    public String getChildOfVal5Tag2() {
+        return childOfVal5Tag2;
+    }
+
+    public void setChildOfVal5Tag2(String childOfVal5Tag2) {
+        this.childOfVal5Tag2 = childOfVal5Tag2;
+    }
+}
+---------------------------------
+package com.example;
+
+import javax.xml.bind.annotation.XmlElement;
+
+public class DataCVAL3 {
+    private String headerCVAL3;
+    private List<String> dataCVAL3List = new ArrayList<>();
+
+    @XmlElement(name = "headerCVAL3")
+    public String getHeaderCVAL3() {
+        return headerCVAL3;
+    }
+
+    public void setHeaderCVAL3(String headerCVAL3) {
+        this.headerCVAL3 = headerCVAL3;
+    }
+
+    @XmlElement(name = "dataCVAL3")
+    public List<String> getDataCVAL3List() {
+        return dataCVAL3List;
+    }
+
+    public void setDataCVAL3List(List<String> dataCVAL3List) {
+        this.dataCVAL3List = dataCVAL3List;
+    }
+}
+----------------------------
+package com.example;
+
+import javax.xml.bind.annotation.XmlElement;
+import java.util.ArrayList;
+import java.util.List;
+
+public class Val3 {
+    private List<DataCVAL3> dataCVAL3 = new ArrayList<>();
+
+    @XmlElement(name = "CHILDOFVAL3")
+    public List<DataCVAL3> getDataCVAL3() {
+        return dataCVAL3;
+    }
+
+    public void setDataCVAL3(List<DataCVAL3> dataCVAL3) {
+        this.dataCVAL3 = dataCVAL3;
+    }
+}
+
+-------------------------------------
+package com.example;
+
+import javax.xml.bind.annotation.XmlElement;
+import java.util.ArrayList;
+import java.util.List;
+
+public class DynamicTag {
+    private String val1 = "0998";
+    private String val2 = "0998";
+    private Val3 val3;
+    private String val4 = "0998";
+    private Val5 val5;
+
+    @XmlElement(name = "VAL1")
+    public String getVal1() {
+        return val1;
+    }
+
+    public void setVal1(String val1) {
+        this.val1 = val1;
+    }
+
+    @XmlElement(name = "VAL2")
+    public String getVal2() {
+        return val2;
+    }
+
+    public void setVal2(String val2) {
+        this.val2 = val2;
+    }
+
+    @XmlElement(name = "VAL3")
+    public Val3 getVal3() {
+        return val3;
+    }
+
+    public void setVal3(Val3 val3) {
+        this.val3 = val3;
+    }
+
+    @XmlElement(name = "VAL4")
+    public String getVal4() {
+        return val4;
+    }
+
+    public void setVal4(String val4) {
+        this.val4 = val4;
+    }
+
+    @XmlElement(name = "VAL5")
+    public Val5 getVal5() {
+        return val5;
+    }
+
+    public void setVal5(Val5 val5) {
+        this.val5 = val5;
+    }
+}
+
+-----------------------------------
+package com.example;
+
+import javax.xml.bind.annotation.XmlElement;
+
+public class Head {
+    private String hdr1;
+    private String hdr2;
+    private String hdr3;
+
+    @XmlElement(name = "hdr1")
+    public String getHdr1() {
+        return hdr1;
+    }
+
+    public void setHdr1(String hdr1) {
+        this.hdr1 = hdr1;
+    }
+
+    @XmlElement(name = "hdr2")
+    public String getHdr2() {
+        return hdr2;
+    }
+
+    public void setHdr2(String hdr2) {
+        this.hdr2 = hdr2;
+    }
+
+    @XmlElement(name = "hdr3")
+    public String getHdr3() {
+        return hdr3;
+    }
+
+    public void setHdr3(String hdr3) {
+        this.hdr3 = hdr3;
+    }
+}
+
