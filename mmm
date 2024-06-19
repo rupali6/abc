@@ -1,0 +1,26 @@
+  private static String adjustGodTagIndentation(String xml) {
+        // Adjust the indentation of the <GOD> closing tag
+        String closingTag = "</GOD>";
+        int index = xml.lastIndexOf(closingTag);
+        if (index != -1) {
+            String before = xml.substring(0, index);
+            String after = xml.substring(index);
+            // Find the last new line before the closing tag
+            int lastNewLineIndex = before.lastIndexOf("\n");
+            if (lastNewLineIndex != -1) {
+                String indent = before.substring(lastNewLineIndex + 1);
+                after = indent + after;
+            }
+            return before + after;
+        }
+        return xml;
+    }
+
+----------------
+
+   // Get the XML string and post-process it
+            String xmlString = sw.toString();
+            xmlString = adjustGodTagIndentation(xmlString);
+
+            // Print the adjusted XML
+            System.out.println(xmlString);
