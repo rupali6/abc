@@ -1,0 +1,36 @@
+package com.example;
+
+import javax.xml.bind.annotation.XmlElement;
+
+public class Head {
+    private String hdr1;
+    private String hdr2;
+    private String hdr3;
+
+    @XmlElement(name = "hdr1")
+    public String getHdr1() {
+        return hdr1;
+    }
+
+    public void setHdr1(String hdr1) {
+        this.hdr1 = hdr1;
+    }
+
+    @XmlElement(name = "hdr2")
+    public String getHdr2() {
+        return hdr2;
+    }
+
+    public void setHdr2(String hdr2) {
+        this.hdr2 = hdr2;
+    }
+
+    @XmlElement(name = "hdr3")
+    public String getHdr3() {
+        return hdr3;
+    }
+
+    public void setHdr3(String hdr3) {
+        this.hdr3 = hdr3;
+    }
+}
