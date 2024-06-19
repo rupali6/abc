@@ -1,0 +1,7 @@
+ // Write to System.out with custom writer
+            StringWriter sw = new StringWriter();
+            DataWriter dw = new DataWriter(sw, "UTF-8", new JaxbIndentCharacterEscapeHandler());
+            marshaller.marshal(god, dw);
+            System.out.println(sw.toString());
+
+            // Write to File
