@@ -1,0 +1,123 @@
+package com.example;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.transform.Result;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import org.w3c.dom.Document;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.DocumentBuilder;
+import java.io.File;
+import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.List;
+
+public class CustomXMLWriter {
+
+    public static void main(String[] args) {
+        int n = 5; // Number of DYNAMICTAG elements
+        int count = 4; // Number of dataCVAL3 elements
+        int c2Count = 10; // Number of C2 elements
+
+        God god = new God();
+        god.setHead(createHead());
+        god.setDynamicTags(createDynamicTags(n, count));
+        god.setDemigod(createDemigod(c2Count));
+        god.setLastTag(createLastTag());
+
+        try {
+            // Create JAXB context and instantiate marshaller
+            JAXBContext context = JAXBContext.newInstance(God.class);
+            Marshaller marshaller = context.createMarshaller();
+            marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+
+            // Create a Document
+            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+            DocumentBuilder db = dbf.newDocumentBuilder();
+            Document doc = db.newDocument();
+
+            // Marshal the Java object into the Document
+            marshaller.marshal(god, doc);
+
+            // Transform the Document to XML with proper indentation
+            Transformer transformer = TransformerFactory.newInstance().newTransformer();
+            transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
+            transformer.setOutputProperty("indent", "yes");
+
+            // Write to System.out
+            StreamResult result = new StreamResult(new StringWriter());
+            transformer.transform(new DOMSource(doc), result);
+            String xmlString = result.getWriter().toString();
+            System.out.println(xmlString);
+
+            // Write to File
+            transformer.transform(new DOMSource(doc), new StreamResult(new File("custom.xml")));
+
+            System.out.println("XML file created successfully!");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static Head createHead() {
+        Head head = new Head();
+        head.setHdr1("data");
+        head.setHdr2("data");
+        head.setHdr3("data");
+        return head;
+    }
+
+    private static List<DynamicTag> createDynamicTags(int n, int count) {
+        List<DynamicTag> dynamicTags = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            DynamicTag dynamicTag = new DynamicTag();
+            dynamicTag.setVal3(createVal3(count));
+            dynamicTag.setVal5(createVal5());
+            dynamicTags.add(dynamicTag);
+        }
+        return dynamicTags;
+    }
+
+    private static Val3 createVal3(int count) {
+        Val3 val3 = new Val3();
+        DataCVAL3 dataCVAL3 = new DataCVAL3();
+        dataCVAL3.setHeaderCVAL3("count");
+        StringBuilder dataValues = new StringBuilder();
+        for (int i = 0; i < count; i++) {
+            if (i > 0) {
+                dataValues.append(" ");
+            }
+            dataValues.append("somedata");
+        }
+        dataCVAL3.setDataCVAL3(dataValues.toString());
+        val3.getDataCVAL3().add(dataCVAL3);
+        return val3;
+    }
+
+    private static Val5 createVal5() {
+        Val5 val5 = new Val5();
+        return val5;
+    }
+
+    private static Demigod createDemigod(int c2Count) {
+        Demigod demigod = new Demigod();
+        C c = new C();
+        for (int i = 0; i < c2Count; i++) {
+            c.getC2().add("0998");
+        }
+        demigod.setC(c);
+        return demigod;
+    }
+
+    private static LastTag createLastTag() {
+        LastTag lastTag = new LastTag();
+        W w = new W();
+        lastTag.setW(w);
+        return lastTag;
+    }
+}
