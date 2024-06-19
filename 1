@@ -1,0 +1,50 @@
+package com.example;
+
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import java.util.ArrayList;
+import java.util.List;
+
+@XmlRootElement(name = "GOD")
+public class God {
+    private Head head;
+    private List<DynamicTag> dynamicTags = new ArrayList<>();
+    private Demigod demigod;
+    private LastTag lastTag;
+
+    @XmlElement(name = "Head")
+    public Head getHead() {
+        return head;
+    }
+
+    public void setHead(Head head) {
+        this.head = head;
+    }
+
+    @XmlElement(name = "DYNAMICTAG")
+    public List<DynamicTag> getDynamicTags() {
+        return dynamicTags;
+    }
+
+    public void setDynamicTags(List<DynamicTag> dynamicTags) {
+        this.dynamicTags = dynamicTags;
+    }
+
+    @XmlElement(name = "DEMIGOD")
+    public Demigod getDemigod() {
+        return demigod;
+    }
+
+    public void setDemigod(Demigod demigod) {
+        this.demigod = demigod;
+    }
+
+    @XmlElement(name = "LASTTAG")
+    public LastTag getLastTag() {
+        return lastTag;
+    }
+
+    public void setLastTag(LastTag lastTag) {
+        this.lastTag = lastTag;
+    }
+}
