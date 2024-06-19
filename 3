@@ -1,0 +1,58 @@
+package com.example;
+
+import javax.xml.bind.annotation.XmlElement;
+import java.util.ArrayList;
+import java.util.List;
+
+public class DynamicTag {
+    private String val1 = "0998";
+    private String val2 = "0998";
+    private Val3 val3;
+    private String val4 = "0998";
+    private Val5 val5;
+
+    @XmlElement(name = "VAL1")
+    public String getVal1() {
+        return val1;
+    }
+
+    public void setVal1(String val1) {
+        this.val1 = val1;
+    }
+
+    @XmlElement(name = "VAL2")
+    public String getVal2() {
+        return val2;
+    }
+
+    public void setVal2(String val2) {
+        this.val2 = val2;
+    }
+
+    @XmlElement(name = "VAL3")
+    public Val3 getVal3() {
+        return val3;
+    }
+
+    public void setVal3(Val3 val3) {
+        this.val3 = val3;
+    }
+
+    @XmlElement(name = "VAL4")
+    public String getVal4() {
+        return val4;
+    }
+
+    public void setVal4(String val4) {
+        this.val4 = val4;
+    }
+
+    @XmlElement(name = "VAL5")
+    public Val5 getVal5() {
+        return val5;
+    }
+
+    public void setVal5(Val5 val5) {
+        this.val5 = val5;
+    }
+}
