@@ -1,0 +1,26 @@
+package com.example;
+
+import javax.xml.bind.annotation.XmlElement;
+
+public class DataCVAL3 {
+    private String headerCVAL3;
+    private List<String> dataCVAL3List = new ArrayList<>();
+
+    @XmlElement(name = "headerCVAL3")
+    public String getHeaderCVAL3() {
+        return headerCVAL3;
+    }
+
+    public void setHeaderCVAL3(String headerCVAL3) {
+        this.headerCVAL3 = headerCVAL3;
+    }
+
+    @XmlElement(name = "dataCVAL3")
+    public List<String> getDataCVAL3List() {
+        return dataCVAL3List;
+    }
+
+    public void setDataCVAL3List(List<String> dataCVAL3List) {
+        this.dataCVAL3List = dataCVAL3List;
+    }
+}
