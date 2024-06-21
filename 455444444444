@@ -1,0 +1,22 @@
+#!/bin/bash
+
+source_folder="/src"
+destination_folder="/directory"
+zip_filename="archive.zip"
+
+# Attempt to zip the folder thrice
+for attempt in {1..3}; do
+    echo "Attempt $attempt: Zipping folder..."
+
+    # Run the zip command
+    zip -r "$destination_folder/$zip_filename" "$source_folder"
+
+    # Check if zip command was successful
+    if [ $? -eq 0 ]; then
+        echo "Zip operation successful."
+        break  # Exit the loop if zip was successful
+    else
+        echo "Zip operation failed. Retrying in 5 minutes..."
+        sleep 300  # Sleep for 5 minutes (300 seconds)
+    fi
+done
