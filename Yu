@@ -1,0 +1,47 @@
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+import java.time.DayOfWeek;
+import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
+import java.util.List;
+
+public class Main {
+    public static void main(String[] args) {
+        // List of dates to test
+        List<LocalDate> testDates = Arrays.asList(
+            LocalDate.of(2024, 6, 23),
+            LocalDate.of(2024, 1, 1),
+            LocalDate.of(2023, 12, 25),
+            LocalDate.of(2024, 3, 14),
+            LocalDate.of(2023, 11, 30)
+        );
+
+        // Formatter for the desired date format
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+
+        // Process each date
+        for (LocalDate currentDate : testDates) {
+            // Calculate the date 14 days ago
+            LocalDate date14DaysAgo = currentDate.minus(14, ChronoUnit.DAYS);
+
+            // Find the Sunday of the week for date14DaysAgo
+            LocalDate sunday = date14DaysAgo;
+            while (sunday.getDayOfWeek() != DayOfWeek.SUNDAY) {
+                sunday = sunday.minus(1, ChronoUnit.DAYS);
+            }
+
+            // Find the Saturday of the same week
+            LocalDate saturday = date14DaysAgo;
+            while (saturday.getDayOfWeek() != DayOfWeek.SATURDAY) {
+                saturday = saturday.plus(1, ChronoUnit.DAYS);
+            }
+
+            // Print the result in the desired format
+            System.out.println("For current date " + currentDate.format(formatter) + ":");
+            System.out.println("14 days ago: " + date14DaysAgo.format(formatter));
+            System.out.println("Week start (Sunday): " + sunday.format(formatter));
+            System.out.println("Week end (Saturday): " + saturday.format(formatter));
+            System.out.println();
+        }
+    }
+}
