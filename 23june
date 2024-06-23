@@ -1,0 +1,23 @@
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalAdjusters;
+import java.time.DayOfWeek;
+
+public class Main {
+    public static void main(String[] args) {
+        // Get the current date
+        LocalDate currentDate = LocalDate.now();
+        
+        // Calculate the date 14 days ago
+        LocalDate date14DaysAgo = currentDate.minus(14, ChronoUnit.DAYS);
+        
+        // Find the next Wednesday on or before date14DaysAgo
+        LocalDate targetDate = date14DaysAgo;
+        while (targetDate.getDayOfWeek() != DayOfWeek.WEDNESDAY) {
+            targetDate = targetDate.minus(1, ChronoUnit.DAYS);
+        }
+        
+        // Print the result
+        System.out.println("The date that is 14 days or more older than the current date and is a Wednesday: " + targetDate);
+    }
+}
