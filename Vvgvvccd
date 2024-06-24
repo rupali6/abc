@@ -1,0 +1,33 @@
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+
+public class SumValuesFromFile {
+
+    public static void main(String[] args) {
+        String fileName = "input.txt"; // replace with your file name
+        String prefix = "Abc of Rtg : ";
+        int sum = 0;
+
+        try (BufferedReader br = new BufferedReader(new FileReader(fileName))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                int index = line.indexOf(prefix);
+                if (index != -1) {
+                    String numberStr = line.substring(index + prefix.length()).trim();
+                    try {
+                        int number = Integer.parseInt(numberStr);
+                        sum += number;
+                    } catch (NumberFormatException e) {
+                        // Handle case where the substring is not a valid integer
+                        System.err.println("Error parsing number from line: " + line);
+                    }
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println("The sum of all values of 'Abc of Rtg' is: " + sum);
+    }
+}
