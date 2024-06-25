@@ -1,0 +1,92 @@
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+public class RupaliParser {
+
+    public static void main(String[] args) {
+        String filePath = "path/to/your/file.txt"; // specify your file path
+        List<RupaliObject> rupaliObjects = parseFile(filePath);
+
+        // Print the objects to verify
+        for (RupaliObject obj : rupaliObjects) {
+            System.out.println(obj);
+        }
+    }
+
+    public static List<RupaliObject> parseFile(String filePath) {
+        List<RupaliObject> rupaliObjects = new ArrayList<>();
+        String currentLabelRupali = "";
+
+        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                if (line.startsWith("lionParrot")) {
+                    int startIndex = line.indexOf("RUPALI:");
+                    if (startIndex != -1) {
+                        currentLabelRupali = line.substring(startIndex + 7).trim();
+                    }
+                } else if (line.startsWith("ProspectUpdated")) {
+                    String valueOfRupaliTag = "";
+                    String valueOfRupali11Tag = "";
+                    String valueOfRupali22Tag = "";
+                    String valueOfRupali33Tag = "";
+                    
+                    while ((line = br.readLine()) != null && !line.startsWith("ProspectUpdated") && !line.startsWith("lionParrot")) {
+                        String tagValue = getTagValue(line, br);
+                        switch (getTagType(line)) {
+                            case "RupaliTag":
+                                valueOfRupaliTag = tagValue;
+                                break;
+                            case "Rupali11Tag":
+                                valueOfRupali11Tag = tagValue;
+                                break;
+                            case "Rupali22Tag":
+                                valueOfRupali22Tag = tagValue;
+                                break;
+                            case "Rupali33Tag":
+                                valueOfRupali33Tag = tagValue;
+                                break;
+                        }
+                    }
+                    if (!valueOfRupaliTag.isEmpty() || !valueOfRupali11Tag.isEmpty() || !valueOfRupali22Tag.isEmpty() || !valueOfRupali33Tag.isEmpty()) {
+                        rupaliObjects.add(new RupaliObject(currentLabelRupali, valueOfRupaliTag, valueOfRupali11Tag, valueOfRupali22Tag, valueOfRupali33Tag));
+                    }
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return rupaliObjects;
+    }
+
+    private static String getTagType(String line) {
+        if (line.startsWith("RupaliTag:")) {
+            return "RupaliTag";
+        } else if (line.startsWith("Rupali11Tag:")) {
+            return "Rupali11Tag";
+        } else if (line.startsWith("Rupali22Tag:")) {
+            return "Rupali22Tag";
+        } else if (line.startsWith("Rupali33Tag:")) {
+            return "Rupali33Tag";
+        }
+        return "";
+    }
+
+    private static String getTagValue(String line, BufferedReader br) throws IOException {
+        // Check if the value is on the same line
+        int tagIndex = line.indexOf(':') + 1;
+        String value = line.substring(tagIndex).trim();
+
+        // Read the next line and append its value if it's not a new tag or block
+        String nextLine = br.readLine();
+        if (nextLine != null && !nextLine.startsWith("ProspectUpdated") && !nextLine.startsWith("lionParrot") && !nextLine.contains(":")) {
+            value += " " + nextLine.trim();
+        }
+
+        return value;
+    }
+}
