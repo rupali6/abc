@@ -1,0 +1,137 @@
+import java.util.ArrayList;
+import java.util.List;
+
+public class RupaliObject {
+    private String labelRupali;
+    private String valueOfRupaliTag;
+    private String valueOfRupali11Tag;
+    private String valueOfRupali22Tag;
+    private String valueOfRupali33Tag;
+    private List<String> stringList1;
+    private List<String> stringList2;
+    private List<String> stringList3;
+    private List<String> stringList4;
+    private List<String> stringList5;
+    private String[] stringArray;
+
+    public RupaliObject(String labelRupali, String valueOfRupaliTag, String valueOfRupali11Tag, String valueOfRupali22Tag, String valueOfRupali33Tag) {
+        this.labelRupali = labelRupali;
+        this.valueOfRupaliTag = valueOfRupaliTag;
+        this.valueOfRupali11Tag = valueOfRupali11Tag;
+        this.valueOfRupali22Tag = valueOfRupali22Tag;
+        this.valueOfRupali33Tag = valueOfRupali33Tag;
+        this.stringList1 = new ArrayList<>();
+        this.stringList2 = new ArrayList<>();
+        this.stringList3 = new ArrayList<>();
+        this.stringList4 = new ArrayList<>();
+        this.stringList5 = new ArrayList<>();
+        this.stringArray = new String[10];
+    }
+
+    // Getters and Setters
+
+    public String getLabelRupali() {
+        return labelRupali;
+    }
+
+    public void setLabelRupali(String labelRupali) {
+        this.labelRupali = labelRupali;
+    }
+
+    public String getValueOfRupaliTag() {
+        return valueOfRupaliTag;
+    }
+
+    public void setValueOfRupaliTag(String valueOfRupaliTag) {
+        this.valueOfRupaliTag = valueOfRupaliTag;
+    }
+
+    public String getValueOfRupali11Tag() {
+        return valueOfRupali11Tag;
+    }
+
+    public void setValueOfRupali11Tag(String valueOfRupali11Tag) {
+        this.valueOfRupali11Tag = valueOfRupali11Tag;
+    }
+
+    public String getValueOfRupali22Tag() {
+        return valueOfRupali22Tag;
+    }
+
+    public void setValueOfRupali22Tag(String valueOfRupali22Tag) {
+        this.valueOfRupali22Tag = valueOfRupali22Tag;
+    }
+
+    public String getValueOfRupali33Tag() {
+        return valueOfRupali33Tag;
+    }
+
+    public void setValueOfRupali33Tag(String valueOfRupali33Tag) {
+        this.valueOfRupali33Tag = valueOfRupali33Tag;
+    }
+
+    public List<String> getStringList1() {
+        return stringList1;
+    }
+
+    public void setStringList1(List<String> stringList1) {
+        this.stringList1 = stringList1;
+    }
+
+    public List<String> getStringList2() {
+        return stringList2;
+    }
+
+    public void setStringList2(List<String> stringList2) {
+        this.stringList2 = stringList2;
+    }
+
+    public List<String> getStringList3() {
+        return stringList3;
+    }
+
+    public void setStringList3(List<String> stringList3) {
+        this.stringList3 = stringList3;
+    }
+
+    public List<String> getStringList4() {
+        return stringList4;
+    }
+
+    public void setStringList4(List<String> stringList4) {
+        this.stringList4 = stringList4;
+    }
+
+    public List<String> getStringList5() {
+        return stringList5;
+    }
+
+    public void setStringList5(List<String> stringList5) {
+        this.stringList5 = stringList5;
+    }
+
+    public String[] getStringArray() {
+        return stringArray;
+    }
+
+    public void setStringArray(String[] stringArray) {
+        this.stringArray = stringArray;
+    }
+
+    @Override
+    public String toString() {
+        return "RupaliObject{" +
+                "labelRupali='" + labelRupali + '\'' +
+                ", valueOfRupaliTag='" + valueOfRupaliTag + '\'' +
+                ", valueOfRupali11Tag='" + valueOfRupali11Tag + '\'' +
+                ", valueOfRupali22Tag='" + valueOfRupali22Tag + '\'' +
+                ", valueOfRupali33Tag='" + valueOfRupali33Tag + '\'' +
+                ", stringList1=" + stringList1 +
+                ", stringList2=" + stringList2 +
+                ", stringList3=" + stringList3 +
+                ", stringList4=" + stringList4 +
+                ", stringList5=" + stringList5 +
+                ", stringArray=" + java.util.Arrays.toString(stringArray) +
+                '}';
+    }
+}
