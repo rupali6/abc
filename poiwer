@@ -1,0 +1,14 @@
+private static String getTagValue(String line, BufferedReader br) throws IOException {
+    int tagIndex = line.indexOf(':') + 1;
+    String value = line.substring(tagIndex).trim();
+
+    // If the value is empty, read the next line
+    if (value.isEmpty()) {
+        String nextLine = br.readLine();
+        if (nextLine != null) {
+            value = nextLine.trim();
+        }
+    }
+
+    return value;
+}
