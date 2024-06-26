@@ -1,0 +1,26 @@
+public class SubstringExtractor {
+    public static void main(String[] args) {
+        String input = "enejncdejsnewjrupali*7454868-350:hbhebdbnwfbw";
+
+        String result = extractSubstringAfterKeyword(input, "rupali", ":");
+        System.out.println(result); // Output: 7454868-350
+    }
+
+    public static String extractSubstringAfterKeyword(String input, String keyword, String endMarker) {
+        int keywordIndex = input.indexOf(keyword);
+        
+        if (keywordIndex == -1) {
+            return "Keyword not found";
+        }
+        
+        // Start index is the character immediately after the keyword
+        int startIndex = keywordIndex + keyword.length() + 1;
+        int endIndex = input.indexOf(endMarker, startIndex);
+        
+        if (endIndex == -1) {
+            return "End marker not found";
+        }
+        
+        return input.substring(startIndex, endIndex);
+    }
+}
