@@ -1,0 +1,85 @@
+import java.io.IOException;
+import java.nio.file.*;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.util.ArrayList;
+import java.util.List;
+
+public class FileProcessor {
+    public static void main(String[] args) {
+        String directoryPath = "/path/to/your/directory";
+        String backupDirectoryPath = directoryPath + "/backup";
+
+        try {
+            // Step 1: Read all files from the specified Unix path
+            List<Path> files = listFiles(directoryPath);
+
+            // Step 2: Run a function on each file
+            for (Path file : files) {
+                processFile(file);
+            }
+
+            // Step 3: Move all files to a new folder called "backup"
+            createBackupDirectory(backupDirectoryPath);
+            for (Path file : files) {
+                moveFileToBackup(file, backupDirectoryPath);
+            }
+
+            // Step 4: Run another function on the files present in the current path
+            List<Path> currentFiles = listFiles(directoryPath);
+            for (Path file : currentFiles) {
+                processCurrentPathFiles(file);
+            }
+
+            // Step 5: Remove all files from the current path and the "backup" folder
+            deleteFiles(currentFiles);
+            List<Path> backupFiles = listFiles(backupDirectoryPath);
+            deleteFiles(backupFiles);
+            Files.delete(Paths.get(backupDirectoryPath)); // Delete the backup directory itself
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static List<Path> listFiles(String directoryPath) throws IOException {
+        List<Path> fileList = new ArrayList<>();
+        Files.walkFileTree(Paths.get(directoryPath), new SimpleFileVisitor<Path>() {
+            @Override
+            public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) {
+                fileList.add(file);
+                return FileVisitResult.CONTINUE;
+            }
+        });
+        return fileList;
+    }
+
+    public static void processFile(Path file) {
+        // Implement your function to process each file here
+        System.out.println("Processing file: " + file.toString());
+    }
+
+    public static void createBackupDirectory(String backupDirectoryPath) throws IOException {
+        Path backupDir = Paths.get(backupDirectoryPath);
+        if (!Files.exists(backupDir)) {
+            Files.createDirectory(backupDir);
+        }
+    }
+
+    public static void moveFileToBackup(Path file, String backupDirectoryPath) throws IOException {
+        Path backupFile = Paths.get(backupDirectoryPath, file.getFileName().toString());
+        Files.move(file, backupFile, StandardCopyOption.REPLACE_EXISTING);
+        System.out.println("Moved file to backup: " + backupFile.toString());
+    }
+
+    public static void processCurrentPathFiles(Path file) {
+        // Implement your function to process files in the current path here
+        System.out.println("Processing current path file: " + file.toString());
+    }
+
+    public static void deleteFiles(List<Path> files) throws IOException {
+        for (Path file : files) {
+            Files.delete(file);
+            System.out.println("Deleted file: " + file.toString());
+        }
+    }
+}
