@@ -1,0 +1,30 @@
+public class SubstringExtractor {
+    public static void main(String[] args) {
+        String str1 = "nhdddddnd{rupali}{is}{coool}p}hddddd";
+        String str2 = "hcusdhvudvh[tripathi]hi[there][work]hard]and stay positive]jdnjdnjnd";
+
+        System.out.println(extractSubstring(str1));
+        System.out.println(extractSubstring(str2));
+    }
+
+    public static String extractSubstring(String input) {
+        int startIndex = -1;
+        int endIndex = -1;
+
+        // Determine the type of brackets
+        if (input.contains("{") && input.contains("}")) {
+            startIndex = input.indexOf("{");
+            endIndex = input.lastIndexOf("}");
+        } else if (input.contains("[") && input.contains("]")) {
+            startIndex = input.indexOf("[");
+            endIndex = input.lastIndexOf("]");
+        }
+
+        // If both indices are found, extract and return the substring
+        if (startIndex != -1 && endIndex != -1) {
+            return input.substring(startIndex, endIndex + 1);
+        } else {
+            return "No matching brackets found";
+        }
+    }
+}
