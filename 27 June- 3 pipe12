@@ -1,0 +1,31 @@
+import java.util.HashMap;
+import java.util.Map;
+
+public class DataExtractor {
+    public static void main(String[] args) {
+        String data = "|rupaliTripathi|1|2|3|4|5|6|7|8|9|10|11|12||jsnjn|nsn|sij|nhss||alka|11|22|33|44|55|66|77|88|99|1010|1111|1212||jsnjn|nsn|sij|nhss|";
+        String searchString = "rupaliTripathi";
+        
+        String[] values = extractValues(data, searchString);
+        System.out.println("Values for " + searchString + ": ");
+        for (String value : values) {
+            System.out.print(value + " ");
+        }
+    }
+    
+    public static String[] extractValues(String data, String searchString) {
+        String[] elements = data.split("\\|");
+        String[] values = new String[12];
+        
+        for (int i = 0; i < elements.length; i++) {
+            if (elements[i].equals(searchString)) {
+                for (int j = 0; j < 12; j++) {
+                    values[j] = elements[i + j + 1];
+                }
+                break;
+            }
+        }
+        
+        return values;
+    }
+}
