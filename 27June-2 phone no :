@@ -1,0 +1,19 @@
+public class SubstringExtractor {
+    public static void main(String[] args) {
+        String input = "enejncdejsnewjrupali*7454868-350:hbhebdbnwfbw";
+
+        String result = extractSubstringBetween(input, "rupali*", ":");
+        System.out.println(result); // Output: 7454868-350
+    }
+
+    public static String extractSubstringBetween(String input, String startMarker, String endMarker) {
+        int startIndex = input.indexOf(startMarker);
+        int endIndex = input.indexOf(endMarker, startIndex);
+
+        if (startIndex != -1 && endIndex != -1) {
+            return input.substring(startIndex + startMarker.length(), endIndex);
+        } else {
+            return "Markers not found";
+        }
+    }
+}
