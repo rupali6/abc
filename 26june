@@ -1,0 +1,38 @@
+import java.io.*;
+import java.nio.file.*;
+import java.util.regex.*;
+
+public class FileUpdater {
+    public static void main(String[] args) {
+        String inputFilePath = "input.txt";
+        String outputFilePath = "output.txt";
+        
+        try {
+            // Read the entire content of the file
+            String content = new String(Files.readAllBytes(Paths.get(inputFilePath)));
+
+            // Define the regex pattern to find the desired lines
+            String regex = "(.*\\?rupali.*)";
+            Pattern pattern = Pattern.compile(regex);
+            Matcher matcher = pattern.matcher(content);
+
+            // Create a buffer to hold the new content
+            StringBuffer newContent = new StringBuffer();
+
+            while (matcher.find()) {
+                // Replace the matched content with the desired format
+                String matchedLine = matcher.group(1);
+                String replacement = matchedLine.replace("?rupali", "?\nThis is my new custom next line\nrupali");
+                matcher.appendReplacement(newContent, replacement);
+            }
+            matcher.appendTail(newContent);
+
+            // Write the new content to the output file
+            Files.write(Paths.get(outputFilePath), newContent.toString().getBytes());
+            
+            System.out.println("File updated successfully.");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
