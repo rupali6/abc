@@ -1,0 +1,43 @@
+import java.util.ArrayList;
+import java.util.List;
+
+public class DataExtractor {
+    public static void main(String[] args) {
+        String data = "|rupaliTripathi|1|2|3|4|5|6|7|8|9|10|11|12||jsnjn|nsn|sij|nhss||alka|11|22|33|44|55|66|77|88|99|1010|1111|1212||rupaliTripathi|13|14|15|16|17|18|19|20|21|22|23|24||jsnjn|nsn|sij|nhss|";
+        String[] searchStrings = {"rupaliTripathi", "alka"};
+        
+        List<String[]> allValues = extractValues(data, searchStrings);
+        
+        int occurrence = 1;
+        for (String[] values : allValues) {
+            System.out.println("Values for occurrence " + occurrence + ": ");
+            for (String value : values) {
+                System.out.print(value + " ");
+            }
+            System.out.println();
+            occurrence++;
+        }
+    }
+    
+    public static List<String[]> extractValues(String data, String[] searchStrings) {
+        List<String[]> allValues = new ArrayList<>();
+        String[] elements = data.split("\\|");
+        
+        for (int i = 0; i < elements.length; i++) {
+            for (String searchString : searchStrings) {
+                if (elements[i].equals(searchString)) {
+                    String[] values = new String[12];
+                    for (int j = 0; j < 12; j++) {
+                        values[j] = elements[i + j + 1];
+                    }
+                    allValues.add(values);
+                    elements[i] = elements[i] + "_processed_" + allValues.size(); // Update the key
+                    i += 12; // Skip the next 12 elements since they have been processed
+                    break;
+                }
+            }
+        }
+        
+        return allValues;
+    }
+}
