@@ -1,0 +1,30 @@
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+public class Main {
+    public static void main(String[] args) {
+        String str = "(A)My value is a(A)(B)My value is B(B)";
+        
+        // Extract data between tags A
+        String dataA = extractDataBetweenTags(str, "A");
+        System.out.println("Data between tag A: " + dataA);
+        
+        // Extract data between tags B
+        String dataB = extractDataBetweenTags(str, "B");
+        System.out.println("Data between tag B: " + dataB);
+    }
+
+    public static String extractDataBetweenTags(String str, String tag) {
+        // Create a regex pattern to find data between the tags
+        String patternString = "\\(" + tag + "\\)(.*?)\\(" + tag + "\\)";
+        Pattern pattern = Pattern.compile(patternString);
+        Matcher matcher = pattern.matcher(str);
+        
+        // Find the data between the tags
+        if (matcher.find()) {
+            return matcher.group(1);
+        } else {
+            return "No data found between the tags " + tag;
+        }
+    }
+}
