@@ -1,0 +1,17 @@
+public class Main {
+    public static void main(String[] args) {
+        String multiLineString = "line1\nline2\nRupaliTripathi\nline4\nline5";
+
+        String matchingLine = null;
+        String[] lines = multiLineString.split("\\r?\\n");
+
+        for (String line : lines) {
+            if (line.contains("RupaliTripathi")) {
+                matchingLine = line;
+                break;
+            }
+        }
+
+        System.out.println("The line containing 'RupaliTripathi' is: " + matchingLine);
+    }
+}
