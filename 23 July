@@ -1,0 +1,17 @@
+#!/bin/bash
+
+# Specify the start and end timestamps
+START_TIME="2022-01-01 00:00:00"
+END_TIME="2022-01-02 00:00:00"
+
+# Convert the timestamps to seconds since the epoch
+START_EPOCH=$(date -d "$START_TIME" +%s)
+END_EPOCH=$(date -d "$END_TIME" +%s)
+
+# List files using ls and filter with awk to match timestamps and filenames containing "rupali"
+ls -l --time-style=+%s /path/to/search | grep -v '^d' | awk -v start="$START_EPOCH" -v end="$END_EPOCH" '
+{
+    if ($6 >= start && $6 <= end && $7 ~ /rupali/) {
+        print $7
+    }
+}'
