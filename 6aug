@@ -1,0 +1,21 @@
+import java.io.IOException;
+import java.nio.file.*;
+import java.util.stream.Stream;
+
+public class FindFilesUsingStreams {
+
+    public static void main(String[] args) {
+        Path startPath = Paths.get("/path/to/start/directory"); // Change this to your starting directory
+        String pattern = "glob:**/rupali*.txt"; // Glob pattern to match files
+
+        try (Stream<Path> stream = Files.walk(startPath)) {
+            PathMatcher matcher = FileSystems.getDefault().getPathMatcher(pattern);
+
+            stream.filter(Files::isRegularFile)
+                  .filter(matcher::matches)
+                  .forEach(System.out::println);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
