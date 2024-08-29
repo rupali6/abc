@@ -1,0 +1,88 @@
+Absolutely! Let's break down the query step-by-step to understand how it works in detail.
+
+Updated Oracle SQL Query
+Here is the query again:
+
+sql
+Copy code
+SELECT id 
+FROM your_table t1
+WHERE isTrue = 'Yes' -- Ensure isTrue is 'Yes'
+AND NOT EXISTS (
+    SELECT 1 
+    FROM (
+        SELECT REGEXP_SUBSTR(t1.nameId, '[^ ]+', 1, LEVEL) AS value
+        FROM DUAL
+        CONNECT BY LEVEL <= LENGTH(t1.nameId) - LENGTH(REPLACE(t1.nameId, ' ', '')) + 1
+    ) sub
+    WHERE value IN (SELECT TO_CHAR(id) FROM your_table)
+);
+Detailed Explanation
+1. Main Query: Selecting id from your_table
+sql
+Copy code
+SELECT id 
+FROM your_table t1
+SELECT id: Selects the id column from the table your_table.
+FROM your_table t1: References your_table and assigns it an alias t1 for easier reference within the query.
+2. Filter Condition for isTrue Column
+sql
+Copy code
+WHERE isTrue = 'Yes'
+WHERE isTrue = 'Yes': Filters the rows so that only those where the isTrue column has the value "Yes" are selected.
+3. NOT EXISTS Subquery: Check if Extracted Values Exist in id Column
+sql
+Copy code
+AND NOT EXISTS (
+    SELECT 1 
+    FROM (
+        SELECT REGEXP_SUBSTR(t1.nameId, '[^ ]+', 1, LEVEL) AS value
+        FROM DUAL
+        CONNECT BY LEVEL <= LENGTH(t1.nameId) - LENGTH(REPLACE(t1.nameId, ' ', '')) + 1
+    ) sub
+    WHERE value IN (SELECT TO_CHAR(id) FROM your_table)
+)
+NOT EXISTS: Ensures that no rows from the subquery match the condition. If any match is found, the current row from your_table (t1) will be excluded from the results.
+4. Innermost Subquery: Split the nameId Column into Separate Values
+sql
+Copy code
+SELECT REGEXP_SUBSTR(t1.nameId, '[^ ]+', 1, LEVEL) AS value
+FROM DUAL
+CONNECT BY LEVEL <= LENGTH(t1.nameId) - LENGTH(REPLACE(t1.nameId, ' ', '')) + 1
+REGEXP_SUBSTR(t1.nameId, '[^ ]+', 1, LEVEL): Extracts one value at a time from the nameId column.
+
+REGEXP_SUBSTR: A regular expression function that extracts substrings from a string.
+t1.nameId: Refers to the nameId column from your_table.
+'[^ ]+': A regular expression pattern that matches any sequence of characters that are not a space ([^ ]+ means "any character except space, one or more times").
+1: Start position for searching within nameId.
+LEVEL: A pseudo-column in Oracle that represents the current level in a hierarchical query. Here, it is used to sequentially extract each value from the nameId field.
+FROM DUAL: Oracle's dummy table, which is used when a query needs to return a value without requiring any specific table.
+
+CONNECT BY LEVEL <= LENGTH(t1.nameId) - LENGTH(REPLACE(t1.nameId, ' ', '')) + 1:
+
+CONNECT BY: Creates a hierarchical query; LEVEL represents the depth of the recursion.
+LEVEL <= LENGTH(t1.nameId) - LENGTH(REPLACE(t1.nameId, ' ', '')) + 1:
+LENGTH(t1.nameId): Calculates the total length of the nameId string.
+REPLACE(t1.nameId, ' ', ''): Removes all spaces from nameId.
+LENGTH(REPLACE(t1.nameId, ' ', '')): Calculates the length of nameId without spaces.
+LENGTH(t1.nameId) - LENGTH(REPLACE(t1.nameId, ' ', '')): Computes the number of spaces in nameId.
++ 1: Adds 1 to get the total number of values in the space-separated string (since there is always one more value than the number of spaces).
+5. Subquery Alias sub and Filter Using IN Clause
+sql
+Copy code
+) sub
+WHERE value IN (SELECT TO_CHAR(id) FROM your_table)
+) sub: Assigns an alias sub to the subquery generating individual values from the nameId column.
+WHERE value IN (SELECT TO_CHAR(id) FROM your_table): Checks if the extracted value exists in the id column of your_table.
+TO_CHAR(id): Converts the id column to a character type (string) to match the type of value.
+Summary of the Query
+Selects rows where isTrue = 'Yes'.
+Extracts each space-separated value from the nameId field.
+Checks if none of the extracted values are found in the id column.
+Returns only the ids that meet these criteria.
+Final Result
+This query will return IDs 4 and 6, where:
+
+ID 4: The values 45, 658, 008 in nameId are not present in the id column.
+ID 6: The values 90, 87 in nameId are not present in the id column.
+These IDs also have isTrue = 'Yes'.
