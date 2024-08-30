@@ -1,0 +1,10 @@
+param="MY_VAR"
+i="   hello=value"  # Example input with spaces
+
+# Calculate val and trim leading/trailing spaces in the same awk command
+val=$(echo "${i}" | awk -F'=' '{gsub(/^[ \t]+|[ \t]+$/, "", $1); print $1}')
+
+# Assign the trimmed value to the variable name stored in param
+eval $param=\"${val}\"
+
+echo "$MY_VAR"  # Output will be: hello
