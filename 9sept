@@ -1,0 +1,1 @@
+awk -F'=' '{gsub(/ /, "", $1); gsub(/ /, "", $2); if ($1 == "A") print $2}' filename
