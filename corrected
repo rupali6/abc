@@ -1,0 +1,54 @@
+WITH SplitNameId AS (
+    SELECT 
+        id,
+        name,
+        nameId,
+        isTrue,
+        REGEXP_SUBSTR(nameId, '[^ ]+', 1, LEVEL) AS nameIdPart
+    FROM 
+        your_table
+    CONNECT BY 
+        REGEXP_SUBSTR(nameId, '[^ ]+', 1, LEVEL) IS NOT NULL
+        AND PRIOR id = id
+        AND PRIOR SYS_GUID() IS NOT NULL
+),
+
+CheckPresence AS (
+    SELECT 
+        s.id,
+        s.name,
+        s.nameId,
+        s.isTrue,
+        s.nameIdPart,
+        CASE 
+            WHEN EXISTS (
+                SELECT 1 
+                FROM your_table t 
+                WHERE t.id = TO_NUMBER(s.nameIdPart)
+                AND t.isTrue = 'Yes'
+            ) THEN 1
+            ELSE 0
+        END AS isPresent
+    FROM 
+        SplitNameId s
+),
+
+AggregatedResults AS (
+    SELECT
+        id,
+        name,
+        nameId,
+        LISTAGG(CASE WHEN isPresent = 0 THEN nameIdPart END, ' ') WITHIN GROUP (ORDER BY nameIdPart) AS missingNameIdList
+    FROM
+        CheckPresence
+    WHERE
+        isTrue = 'Yes'
+    GROUP BY
+        id, name, nameId
+    HAVING
+        COUNT(CASE WHEN isPresent = 0 THEN 1 END) > 0
+        AND COUNT(CASE WHEN isPresent = 1 THEN 1 END) > 0
+)
+
+SELECT *
+FROM AggregatedResults;
