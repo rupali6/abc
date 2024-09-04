@@ -1,0 +1,47 @@
+WITH SplitNameId AS (
+    SELECT 
+        t1.id, 
+        t1.name, 
+        t1.nameId, 
+        t1.isTrue,
+        TRIM(REGEXP_SUBSTR(t1.nameId, '[^ ]+', 1, LEVEL)) AS nameIdPart
+    FROM 
+        your_table t1
+    CONNECT BY 
+        LEVEL <= LENGTH(t1.nameId) - LENGTH(REPLACE(t1.nameId, ' ', '')) + 1
+        AND PRIOR id = id
+        AND PRIOR DBMS_RANDOM.VALUE IS NOT NULL
+),
+PresenceCheck AS (
+    SELECT 
+        s.id, 
+        s.name, 
+        s.nameId, 
+        s.isTrue,
+        s.nameIdPart,
+        CASE 
+            WHEN s.nameIdPart IN (SELECT id FROM your_table) THEN 1
+            ELSE 0
+        END AS isPresent
+    FROM 
+        SplitNameId s
+),
+AggregateResults AS (
+    SELECT 
+        p.id, 
+        p.name, 
+        p.nameId,
+        LISTAGG(p.nameIdPart, ' ') WITHIN GROUP (ORDER BY p.nameIdPart) AS missingNameIdList
+    FROM 
+        PresenceCheck p
+    WHERE 
+        p.isTrue = 'Yes'
+    GROUP BY 
+        p.id, 
+        p.name, 
+        p.nameId
+    HAVING 
+        SUM(p.isPresent) >= 1   -- At least one value is present in the id column
+        AND SUM(p.isPresent) < COUNT(*)  -- At least one value is missing from the id column
+)
+SELECT * FROM AggregateResults;
