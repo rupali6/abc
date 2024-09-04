@@ -1,0 +1,61 @@
+WITH SplitNameId AS (
+    -- Split the nameId column into individual values using CONNECT BY LEVEL
+    SELECT 
+        t1.id, 
+        t1.name, 
+        t1.nameId, 
+        t1.isTrue,
+        TRIM(REGEXP_SUBSTR(t1.nameId, '[^ ]+', 1, LEVEL)) AS nameIdPart
+    FROM 
+        your_table t1
+    CONNECT BY 
+        LEVEL <= LENGTH(t1.nameId) - LENGTH(REPLACE(t1.nameId, ' ', '')) + 1
+        AND PRIOR id = id
+        AND PRIOR DBMS_RANDOM.VALUE IS NOT NULL
+),
+PresenceCheck AS (
+    -- Check if each split nameIdPart is present in the id column of the table
+    SELECT 
+        s.id, 
+        s.name, 
+        s.nameId, 
+        s.isTrue,
+        s.nameIdPart,
+        CASE 
+            WHEN s.nameIdPart IN (SELECT TO_CHAR(id) FROM your_table) THEN 1
+            ELSE 0
+        END AS isPresent
+    FROM 
+        SplitNameId s
+),
+AggregateResults AS (
+    -- Aggregate results to determine rows that meet the criteria
+    SELECT 
+        p.id, 
+        p.name, 
+        p.nameId,
+        p.isTrue,
+        LISTAGG(p.nameIdPart, ' ') WITHIN GROUP (ORDER BY p.nameIdPart) AS missingNameIdList,
+        SUM(p.isPresent) AS presentCount, -- Count of present nameIdParts in id column
+        COUNT(*) AS totalCount            -- Total count of nameIdParts
+    FROM 
+        PresenceCheck p
+    WHERE 
+        p.isTrue = 'Yes'
+    GROUP BY 
+        p.id, 
+        p.name, 
+        p.nameId, 
+        p.isTrue
+    HAVING 
+        presentCount >= 1            -- At least one value is present
+        AND presentCount < totalCount -- At least one value is missing
+)
+-- Select the final results filtering only the desired rows
+SELECT 
+    id, 
+    name, 
+    nameId, 
+    missingNameIdList
+FROM 
+    AggregateResults;
