@@ -1,0 +1,31 @@
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+public class Main {
+    public static void main(String[] args) {
+        String input = "Fghhhbcccc vghhh 4 t u 6 u 7 6 fghhhh (rupali:6 tripathi:9)"; // The input string
+        int a = 0; // Variable to store value of rupali
+        int b = 0; // Variable to store value of tripathi
+
+        // Regular expression pattern to find "rupali:number" and "tripathi:number"
+        Pattern pattern = Pattern.compile("\\b(rupali|tripathi):(\\d+)\\b");
+        Matcher matcher = pattern.matcher(input);
+
+        // Loop through the matches to find values for rupali and tripathi
+        while (matcher.find()) {
+            String name = matcher.group(1); // Group 1 captures the name ("rupali" or "tripathi")
+            int value = Integer.parseInt(matcher.group(2)); // Group 2 captures the number
+
+            // Assign values to variables based on the name
+            if (name.equals("rupali")) {
+                a = value;
+            } else if (name.equals("tripathi")) {
+                b = value;
+            }
+        }
+
+        // Output the values of a and b
+        System.out.println("Value of 'rupali' (a): " + a);
+        System.out.println("Value of 'tripathi' (b): " + b);
+    }
+}
