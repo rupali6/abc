@@ -1,0 +1,23 @@
+import java.io.IOException;
+import java.nio.file.*;
+
+public class MoveFilesExample {
+    public static void main(String[] args) {
+        // Specify source and target directories
+        Path sourceDir = Paths.get("/path/to/source/folder");
+        Path targetDir = Paths.get("/path/to/target/folder");
+
+        try (DirectoryStream<Path> stream = Files.newDirectoryStream(sourceDir)) {
+            // Loop through all the files in the source directory
+            for (Path file : stream) {
+                if (Files.isRegularFile(file)) {  // Check if it's a regular file, not a directory
+                    Path targetPath = targetDir.resolve(file.getFileName());
+                    Files.move(file, targetPath, StandardCopyOption.REPLACE_EXISTING);
+                    System.out.println("Moved: " + file.getFileName());
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
