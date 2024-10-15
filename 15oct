@@ -1,0 +1,51 @@
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+
+public class LineMerger {
+    public static void main(String[] args) {
+        String inputFilePath = "input.file";  // Replace with your input file path
+        String outputFilePath = "output.file"; // Replace with your desired output file path
+
+        try (BufferedReader br = new BufferedReader(new FileReader(inputFilePath));
+             FileWriter writer = new FileWriter(outputFilePath)) {
+
+            String line;
+            StringBuilder mergedLine = new StringBuilder();
+            boolean isMerging = false;
+
+            while ((line = br.readLine()) != null) {
+                if (line.startsWith("Rupali")) {
+                    // If we are merging, write the merged line before starting a new one
+                    if (isMerging) {
+                        writer.write(mergedLine.toString().trim() + "\n");
+                        mergedLine.setLength(0); // Reset the StringBuilder
+                    }
+                    mergedLine.append(line).append(" ");
+                    isMerging = true; // Start merging
+                } else if (line.startsWith("Tripathi") && isMerging) {
+                    // If we hit "Tripathi", we finish merging
+                    mergedLine.append("\n").append(line).append("\n");
+                    writer.write(mergedLine.toString().trim() + "\n");
+                    mergedLine.setLength(0); // Reset for next lines
+                    isMerging = false; // Stop merging
+                } else if (isMerging) {
+                    // Continue merging lines if we're in a merge state
+                    mergedLine.append(line).append(" ");
+                } else {
+                    // Just write the line as it is
+                    writer.write(line + "\n");
+                }
+            }
+
+            // If we end with a merged line, write it out
+            if (isMerging) {
+                writer.write(mergedLine.toString().trim() + "\n");
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
