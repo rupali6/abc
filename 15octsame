@@ -1,0 +1,52 @@
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+
+public class LineMerger {
+    public static void main(String[] args) {
+        String filePath = "input.file";  // Replace with your file path
+
+        StringBuilder content = new StringBuilder();
+
+        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            StringBuilder mergedLine = new StringBuilder();
+            boolean isMerging = false;
+
+            while ((line = br.readLine()) != null) {
+                if (line.startsWith("Rupali")) {
+                    if (isMerging) {
+                        content.append(mergedLine.toString().trim()).append("\n");
+                        mergedLine.setLength(0);
+                    }
+                    mergedLine.append(line).append(" ");
+                    isMerging = true;
+                } else if (line.startsWith("Tripathi") && isMerging) {
+                    mergedLine.append("\n").append(line).append("\n");
+                    content.append(mergedLine.toString().trim()).append("\n");
+                    mergedLine.setLength(0);
+                    isMerging = false;
+                } else if (isMerging) {
+                    mergedLine.append(line).append(" ");
+                } else {
+                    content.append(line).append("\n");
+                }
+            }
+
+            if (isMerging) {
+                content.append(mergedLine.toString().trim()).append("\n");
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // Write the merged content back to the same file
+        try (FileWriter writer = new FileWriter(filePath)) {
+            writer.write(content.toString());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
