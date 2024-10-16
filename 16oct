@@ -1,0 +1,19 @@
+public List<ResultType> getResults(List<String> ids) {
+    List<ResultType> results = new ArrayList<>();
+    
+    // Divide the list into chunks of 1000
+    int chunkSize = 1000;
+    for (int i = 0; i < ids.size(); i += chunkSize) {
+        List<String> chunk = ids.subList(i, Math.min(ids.size(), i + chunkSize));
+        
+        // Construct the SQL query for this chunk
+        String query = "SELECT * FROM your_table WHERE your_column IN (" +
+                       chunk.stream().map(id -> "'" + id + "'").collect(Collectors.joining(",")) + ")";
+        
+        // Execute the query and collect the results (pseudo code)
+        List<ResultType> chunkResults = executeQuery(query);
+        results.addAll(chunkResults);
+    }
+    
+    return results;
+}
