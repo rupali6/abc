@@ -1,0 +1,35 @@
+import java.io.*;
+import java.nio.file.*;
+
+public class SplitFileByDelimiter {
+    public static void main(String[] args) {
+        String inputFile = "a1.txt";
+        String delimiter = "$|";
+        int maxCount = 5;
+
+        try {
+            // Read the entire file content into a single string
+            String content = new String(Files.readAllBytes(Paths.get(inputFile)));
+
+            // Split the content by the delimiter
+            String[] parts = content.split("\\$\\|");
+
+            // Remove any empty parts that may be caused by leading/trailing delimiters
+            parts = cleanEmptyParts(parts);
+
+            // Calculate how many files are needed
+            int totalParts = parts.length;
+            int numFiles = (totalParts + maxCount - 1) / maxCount;
+
+            // Loop through the parts and create new files
+            for (int i = 0; i < numFiles; i++) {
+                String outputFileName = "a" + (i + 2) + ".txt"; // Start from a2.txt
+                int start = i * maxCount;
+                int end = Math.min(start + maxCount, totalParts);
+
+                // Join the parts for the current file, including the delimiters
+                StringBuilder fileContent = new StringBuilder();
+                for (int j = start; j < end; j++) {
+                    if (!parts[j].isEmpty()) {  // Ensure no empty parts are written
+                        fileContent.append(parts[j]);  // Append the message part
+                        if (j < en
