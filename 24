@@ -1,0 +1,41 @@
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.List;
+
+public class InClauseExample {
+
+    public void processInClauseQuery(Connection conn, List<Integer> values) throws SQLException {
+        // Chunk size for values (you can adjust this as per the database limits)
+        int chunkSize = 1000;
+        int totalValues = values.size();
+        
+        for (int i = 0; i < totalValues; i += chunkSize) {
+            // Sublist for chunk processing
+            List<Integer> chunk = values.subList(i, Math.min(totalValues, i + chunkSize));
+            String query = createInClauseQuery(chunk.size());
+            
+            try (PreparedStatement stmt = conn.prepareStatement(query)) {
+                // Set the parameters for each chunk
+                for (int j = 0; j < chunk.size(); j++) {
+                    stmt.setInt(j + 1, chunk.get(j));
+                }
+                // Execute the query
+                stmt.executeQuery();
+            }
+        }
+    }
+
+    // Dynamically create SQL query with appropriate number of ?
+    private String createInClauseQuery(int numPlaceholders) {
+        StringBuilder query = new StringBuilder("SELECT * FROM your_table WHERE your_column IN (");
+        for (int i = 0; i < numPlaceholders; i++) {
+            query.append("?");
+            if (i < numPlaceholders - 1) {
+                query.append(",");
+            }
+        }
+        query.append(")");
+        return query.toString();
+    }
+}
