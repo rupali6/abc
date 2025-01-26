@@ -1,0 +1,87 @@
+import java.io.*;
+import java.sql.*;
+import java.util.*;
+
+public class ReportMerger {
+    public static void main(String[] args) {
+        try {
+            // HashMap to store data from Report A
+            Map<String, List<String>> reportAData = new HashMap<>();
+            
+            // HashMap to store data from Report B
+            Map<String, List<String>> reportBData = new HashMap<>();
+            
+            // JDBC CSV setup for Report A
+            Connection conn = DriverManager.getConnection("jdbc:relique:csv:path_to_csv_files");
+            Statement stmt = conn.createStatement();
+            
+            // Query data from Report A
+            ResultSet rsA = stmt.executeQuery("SELECT * FROM report_a");
+            while (rsA.next()) {
+                String a = rsA.getString("a");
+                String b = rsA.getString("b");
+                String c = rsA.getString("c");
+                String d = rsA.getString("d");
+                
+                // Key for Report A (a, b)
+                String keyA = a + "," + b;
+                
+                // Store values (a, b, c, d)
+                List<String> valuesA = Arrays.asList(a, b, c, d);
+                reportAData.put(keyA, valuesA);
+            }
+            
+            // Query data from Report B
+            ResultSet rsB = stmt.executeQuery("SELECT * FROM report_b");
+            while (rsB.next()) {
+                String b = rsB.getString("b");
+                String e = rsB.getString("e");
+                String f = rsB.getString("f");
+                
+                // Key for Report B (b)
+                String keyB = b;
+                
+                // Store values (e, f)
+                List<String> valuesB = Arrays.asList(e, f);
+                reportBData.put(keyB, valuesB);
+            }
+            
+            // Merged report
+            Map<String, List<String>> mergedReport = new HashMap<>();
+            
+            // Merge data from both reports
+            for (Map.Entry<String, List<String>> entry : reportAData.entrySet()) {
+                String keyA = entry.getKey(); // (a, b)
+                List<String> valuesA = entry.getValue();
+                
+                // Extract `b` from the key (assuming key format is "a,b")
+                String b = keyA.split(",")[1];
+                
+                // Find corresponding e, f for b in Report B
+                if (reportBData.containsKey(b)) {
+                    List<String> valuesB = reportBData.get(b);
+                    
+                    // Combine values from both reports
+                    List<String> mergedValues = new ArrayList<>(valuesA);
+                    mergedValues.addAll(valuesB);
+                    
+                    // Add to merged report
+                    mergedReport.put(keyA, mergedValues);
+                }
+            }
+            
+            // Print merged report
+            for (Map.Entry<String, List<String>> entry : mergedReport.entrySet()) {
+                System.out.println("Key: " + entry.getKey() + ", Values: " + entry.getValue());
+            }
+            
+            // Close connections
+            rsA.close();
+            rsB.close();
+            stmt.close();
+            conn.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
