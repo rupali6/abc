@@ -1,0 +1,52 @@
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
+
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.List;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
+public class CsvReaderServiceTest {
+    
+    @Mock private Connection mockConnection;
+    @Mock private Statement mockStatement;
+    @Mock private ResultSet mockResultSet;
+    
+    private CsvReaderService csvReaderService;
+
+    @Before
+    public void setUp() throws Exception {
+        MockitoAnnotations.initMocks(this);
+        csvReaderService = new CsvReaderService();
+    }
+
+    @Test
+    public void testReadDataFromCsv() throws Exception {
+        // Mock behavior
+        when(mockConnection.createStatement()).thenReturn(mockStatement);
+        when(mockStatement.executeQuery(anyString())).thenReturn(mockResultSet);
+        when(mockResultSet.next()).thenReturn(true, false); // Simulate one row
+        when(mockResultSet.getInt("id")).thenReturn(1);
+        when(mockResultSet.getString("name")).thenReturn("Test Name");
+
+        // Inject the mocked connection using reflection or a constructor if possible
+        // For this example, let's assume we modify CsvReaderService to allow dependency injection.
+
+        // Call the method
+        List<MyObject> result = csvReaderService.readDataFromCsv("dummy/path");
+
+        // Assertions
+        assertNotNull(result);
+        assertEquals(1, result.size());
+        assertEquals(1, result.get(0).getId());
+        assertEquals("Test Name", result.get(0).getName());
+
+        // Verify interactions
+        verify(mockStatement).executeQuery("SELECT * FROM data");
+        verify(mockResultSet, times(2)).next(); // One row + false for termination
+    }
+}
